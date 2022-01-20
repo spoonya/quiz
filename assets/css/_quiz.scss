@@ -1,0 +1,84 @@
+.quiz {
+  max-width: 60rem;
+  min-height: 60rem;
+  width: 100%;
+  height: 100%;
+
+  padding: 3rem;
+
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+  border-radius: 5px;
+}
+
+.quiz__content {
+  .form__checkbox-txt {
+    color: $color-black-alpha;
+  }
+
+  .form__checkbox-styled {
+    background-color: $color-white-gamma;
+
+    min-width: 25px;
+    min-height: 25px;
+
+    &::before {
+      background-color: $color-blue-alpha;
+
+      width: 50%;
+      height: 50%;
+    }
+  }
+}
+
+.quiz__header {
+  h3 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  margin-bottom: 4rem;
+}
+
+.quiz__question {
+  margin-bottom: 3.5rem;
+  font-size: 2rem;
+}
+
+.quiz__answers {
+  display: flex;
+  flex-direction: column;
+
+  margin-bottom: 5rem;
+}
+
+.quiz__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &-button {
+    transition: background-color 0.1s linear;
+
+    &:not(:last-child) {
+      margin-bottom: 1.5rem;
+    }
+
+    &--next {
+      background-color: $color-blue-alpha;
+      color: $color-white-alpha;
+
+      padding: 0.75em 1em;
+
+      border-radius: 3px;
+
+      &:hover {
+        background-color: lighten($color-blue-alpha, 5);
+      }
+    }
+
+    &--prev {
+      border-bottom: 1px dashed;
+    }
+  }
+}
