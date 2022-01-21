@@ -740,7 +740,6 @@ body {
 
 .quiz {
   max-width: 60rem;
-  min-height: 60rem;
   width: 100%;
   height: 100%;
   padding: 3rem;
@@ -788,7 +787,6 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  margin-bottom: 5rem;
 }
 
 .quiz__controls {
@@ -802,6 +800,11 @@ body {
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
+  margin-top: 4rem;
+}
+
+.quiz__controls.hidden {
+  display: none;
 }
 
 .quiz__controls-button {
@@ -826,5 +829,10 @@ body {
 
 .quiz__controls-button--prev {
   border-bottom: 1px dashed;
+  display: none;
+}
+
+.quiz__controls-button--prev.active {
+  display: block;
 }
 /*# sourceMappingURL=style.css.map */

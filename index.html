@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <link rel="stylesheet" href="assets/css/style.css" />
     <title>Quiz</title>
   </head>
@@ -17,15 +18,15 @@
           <div id="quiz-question" class="quiz__question">Вопрос</div>
           <div id="quiz-answers" class="quiz__answers"></div>
         </form>
-        <div class="quiz__controls">
+        <div id="quiz-controls" class="quiz__controls">
           <button
-            id="quiz-next"
+            id="quiz-controls-next"
             class="quiz__controls-button quiz__controls-button--next"
           >
             Далее
           </button>
           <button
-            id="quiz-prev"
+            id="quiz-controls-prev"
             class="quiz__controls-button quiz__controls-button--prev"
           >
             Назад
