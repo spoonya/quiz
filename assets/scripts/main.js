@@ -806,6 +806,15 @@ class Quiz {
     this._controls = this._quiz.querySelector("#quiz-controls");
     this._nextBtn = this._controls.querySelector("#quiz-controls-next");
     this._prevBtn = this._controls.querySelector("#quiz-controls-prev");
+    this._resultContainer = this._quiz.querySelector("#quiz-result");
+    this._resultSite = this._resultContainer.querySelector("#quiz-result-site");
+    this._resultDesign = this._resultContainer.querySelector(
+      "#quiz-result-design"
+    );
+    this._resultServices = this._resultContainer.querySelector(
+      "#quiz-result-services"
+    );
+    this._resultCost = this._resultContainer.querySelector("#quiz-result-cost");
     this._questionNumber = 0;
     this._data = _.merge({}, data);
     this._devBranch = "";
@@ -856,6 +865,14 @@ class Quiz {
 
   _clearAnswers() {
     this._answers.innerHTML = "";
+  }
+
+  _setResult() {
+    const design = this._data.design.types.find(
+      ({ checked }) => checked === true
+    );
+
+    this._resultDesign.innerText = design.label;
   }
 
   _createQuestion(question, checkedInput) {
@@ -1085,6 +1102,7 @@ class Quiz {
       default:
         this._hideControls();
         this._question.innerText = "Результат";
+        this._setResult();
         break;
     }
   }

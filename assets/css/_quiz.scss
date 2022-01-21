@@ -49,6 +49,14 @@
   flex-direction: column;
 }
 
+.quiz__result {
+  // display: none;
+
+  &.active {
+    display: block;
+  }
+}
+
 .quiz__controls {
   display: flex;
   flex-direction: column;

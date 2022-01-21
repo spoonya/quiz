@@ -789,6 +789,10 @@ body {
           flex-direction: column;
 }
 
+.quiz__result.active {
+  display: block;
+}
+
 .quiz__controls {
   display: -webkit-box;
   display: -ms-flexbox;
