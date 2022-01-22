@@ -807,16 +807,6 @@ class Quiz {
     this._nextBtn = this._controls.querySelector("#quiz-controls-next");
     this._prevBtn = this._controls.querySelector("#quiz-controls-prev");
     this._resultContainer = this._quiz.querySelector("#quiz-result");
-    this._resultSite = this._resultContainer.querySelector("#quiz-result-site");
-    this._resultDesign = this._resultContainer.querySelector(
-      "#quiz-result-design"
-    );
-    this._resultServices = this._resultContainer.querySelector(
-      "#quiz-result-services"
-    );
-    this._resultEngine = this._resultContainer.querySelector(
-      "#quiz-result-engine"
-    );
     this._resultCost = this._resultContainer.querySelector("#quiz-result-cost");
     this._questionNumber = 0;
     this._data = _.merge({}, data);
@@ -870,36 +860,59 @@ class Quiz {
     this._answers.innerHTML = "";
   }
 
-  _setResult() {
-    this._resultContainer.classList.add("active");
+  _appendResult(label, result) {
+    this._resultContainer.insertAdjacentHTML(
+      "beforeend",
+      `<p><span>${label}: </span>${result}<p>`
+    );
+  }
 
+  _createResultSite() {
     const site = this._data.sites[this._devBranch].input;
-    this._resultSite.insertAdjacentHTML("beforeend", site.label.toLowerCase());
 
+    this._appendResult("Тип сайта", site.label.toLowerCase());
+  }
+
+  _createResultServices() {
     const services = this._data.sites[this._devBranch].packages.types[
       this._packageBranch
     ]
       .filter(({ checked }) => checked === true)
       .map((service) => " " + service.label.toLowerCase());
-    this._resultServices.insertAdjacentHTML("beforeend", services);
 
-    if (this._data.sites[this._devBranch].engines) {
-      const engine = this._data.sites[this._devBranch].engines.types.find(
-        ({ checked }) => checked === true
-      );
+    this._appendResult("Функционал", services);
+  }
 
-      this._resultEngine.insertAdjacentHTML("beforeend", engine.label);
-    } else {
-      this._resultEngine.remove();
-    }
+  _createResultEngine() {
+    if (!this._data.sites[this._devBranch].engines) return;
 
+    const engine = this._data.sites[this._devBranch].engines.types.find(
+      ({ checked }) => checked === true
+    );
+
+    this._appendResult("CMS", engine.label);
+  }
+
+  _createResultDesign() {
     const design = this._data.design.types.find(
       ({ checked }) => checked === true
     );
-    this._resultDesign.insertAdjacentHTML(
-      "beforeend",
-      design.label.toLowerCase()
-    );
+
+    this._appendResult("Дизайн", design.label.toLowerCase());
+  }
+
+  _createResultCost() {
+    this._appendResult("Стоимость", "1000 BYN");
+  }
+
+  _createResult() {
+    this._resultContainer.classList.add("active");
+
+    this._createResultSite();
+    this._createResultServices();
+    this._createResultEngine();
+    this._createResultDesign();
+    this._createResultCost();
   }
 
   _createQuestion(question, checkedInput) {
@@ -1129,7 +1142,7 @@ class Quiz {
       default:
         this._hideControls();
         this._question.innerText = "Результат";
-        this._setResult();
+        this._createResult();
         break;
     }
   }
