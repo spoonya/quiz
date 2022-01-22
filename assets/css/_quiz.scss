@@ -1,7 +1,10 @@
 .quiz {
   max-width: 60rem;
   width: 100%;
+  max-height: calc(90vh);
   height: 100%;
+
+  overflow-y: auto;
 
   padding: 3rem;
 
@@ -50,10 +53,20 @@
 }
 
 .quiz__result {
-  // display: none;
+  display: none;
 
   &.active {
     display: block;
+  }
+
+  span {
+    font-weight: 700;
+  }
+
+  p {
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
   }
 }
 

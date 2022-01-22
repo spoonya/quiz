@@ -814,6 +814,9 @@ class Quiz {
     this._resultServices = this._resultContainer.querySelector(
       "#quiz-result-services"
     );
+    this._resultEngine = this._resultContainer.querySelector(
+      "#quiz-result-engine"
+    );
     this._resultCost = this._resultContainer.querySelector("#quiz-result-cost");
     this._questionNumber = 0;
     this._data = _.merge({}, data);
@@ -868,11 +871,35 @@ class Quiz {
   }
 
   _setResult() {
+    this._resultContainer.classList.add("active");
+
+    const site = this._data.sites[this._devBranch].input;
+    this._resultSite.insertAdjacentHTML("beforeend", site.label.toLowerCase());
+
+    const services = this._data.sites[this._devBranch].packages.types[
+      this._packageBranch
+    ]
+      .filter(({ checked }) => checked === true)
+      .map((service) => " " + service.label.toLowerCase());
+    this._resultServices.insertAdjacentHTML("beforeend", services);
+
+    if (this._data.sites[this._devBranch].engines) {
+      const engine = this._data.sites[this._devBranch].engines.types.find(
+        ({ checked }) => checked === true
+      );
+
+      this._resultEngine.insertAdjacentHTML("beforeend", engine.label);
+    } else {
+      this._resultEngine.remove();
+    }
+
     const design = this._data.design.types.find(
       ({ checked }) => checked === true
     );
-
-    this._resultDesign.innerText = design.label;
+    this._resultDesign.insertAdjacentHTML(
+      "beforeend",
+      design.label.toLowerCase()
+    );
   }
 
   _createQuestion(question, checkedInput) {
