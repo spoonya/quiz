@@ -424,8 +424,14 @@ class Quiz {
   _createPdfLink() {
     this._resultContainer.insertAdjacentHTML(
       "beforeend",
-      `<a href="#" download>Скачать PDF-документ</a>`
+      `<button id="quiz-pdf-generator" href="#" download>Скачать PDF-документ</button>`
     );
+
+    const pdfButton = this._resultContainer.querySelector(
+      "#quiz-pdf-generator"
+    );
+
+    pdfButton.addEventListener("click", this._createPdf);
   }
 
   _createPdf() {
@@ -436,7 +442,7 @@ class Quiz {
       ],
     };
 
-    const pdf = pdfMake.createPdf(docDefinition);
+    pdfMake.createPdf(docDefinition).download("cost.pdf");
   }
 
   _clearAnswers() {
@@ -471,7 +477,6 @@ class Quiz {
     this._createResultEngine();
     this._createResultDesign();
     this._createResultCost();
-    this._createPdf();
     this._createPdfLink();
   }
 

@@ -825,12 +825,12 @@ body {
   margin-bottom: 10px;
 }
 
-.quiz__result a {
-  text-decoration: underline;
+.quiz__result button {
+  border-bottom: 1px solid;
   color: #0a3d76;
 }
 
-.quiz__result a:hover {
+.quiz__result button:hover {
   color: #0d61a2;
 }
 
