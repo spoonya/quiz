@@ -68,6 +68,15 @@
       margin-bottom: 10px;
     }
   }
+
+  a {
+    text-decoration: underline;
+    color: $color-blue-beta;
+
+    &:hover {
+      color: lighten($color-blue-alpha, 10);
+    }
+  }
 }
 
 .quiz__controls {

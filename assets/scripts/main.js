@@ -19,6 +19,13 @@ class Quiz {
     this._resultContainer = this._quiz.querySelector("#quiz-result");
     this._questionNumber = 0;
     this._data = _.merge({}, data);
+    this._resultData = {
+      site: "",
+      services: [],
+      cms: "",
+      design: "",
+      cost: "",
+    };
     this._devBranch = "";
     this._packageBranch = "";
     this._nextQuestion = "";
@@ -122,6 +129,7 @@ class Quiz {
 
   _createResultSite() {
     const site = this._data.sites[this._devBranch].input;
+    this._resultData.site = site.label.toLowerCase();
 
     this._appendResult("Тип сайта", site.label.toLowerCase());
   }
@@ -133,6 +141,8 @@ class Quiz {
       .filter(({ checked }) => checked === true)
       .map((service) => " " + service.label.toLowerCase());
 
+    this._resultData.services = services;
+
     this._appendResult("Функционал", services);
   }
 
@@ -143,6 +153,8 @@ class Quiz {
       ({ checked }) => checked === true
     );
 
+    this._resultData.cms = engine.label;
+
     this._appendResult("CMS", engine.label);
   }
 
@@ -150,12 +162,42 @@ class Quiz {
     const design = this._data.design.types.find(
       ({ checked }) => checked === true
     );
+    this._resultData.design = design.label.toLowerCase();
 
     this._appendResult("Дизайн", design.label.toLowerCase());
   }
 
   _createResultCost() {
-    this._appendResult("Стоимость", "1000 BYN");
+    this._resultData.cost = 1000;
+
+    this._appendResult("Стоимость", "BYN");
+  }
+
+  _createPdfLink() {
+    this._resultContainer.insertAdjacentHTML(
+      "beforeend",
+      `<a href="#" download>Скачать</a>`
+    );
+  }
+
+  _createPdf() {
+    const docDefinition = {
+      content: [
+        "First paragraph",
+        "Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines",
+      ],
+    };
+
+    const pdf = pdfMake.createPdf(docDefinition);
+    console.log(pdf);
+    // pdf.write("docs/cost.pdf").then(
+    //   () => {
+    //     console.log(new Date() - now);
+    //   },
+    //   (err) => {
+    //     console.error(err);
+    //   }
+    // );
   }
 
   _createResult() {
@@ -166,6 +208,8 @@ class Quiz {
     this._createResultEngine();
     this._createResultDesign();
     this._createResultCost();
+    this._createPdf();
+    this._createPdfLink();
   }
 
   _createAnswers(

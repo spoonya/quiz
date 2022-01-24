@@ -807,6 +807,15 @@ body {
   margin-bottom: 10px;
 }
 
+.quiz__result a {
+  text-decoration: underline;
+  color: #0a3d76;
+}
+
+.quiz__result a:hover {
+  color: #0d61a2;
+}
+
 .quiz__controls {
   display: -webkit-box;
   display: -ms-flexbox;
