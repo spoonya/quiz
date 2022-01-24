@@ -3,7 +3,6 @@ import { data } from "./data.js";
 const questions = {
   sites: "sites",
   packages: "packages",
-  services: "services",
   engines: "engines",
   design: "design",
 };
@@ -17,7 +16,8 @@ class Quiz {
     this._nextBtn = this._controls.querySelector("#quiz-controls-next");
     this._prevBtn = this._controls.querySelector("#quiz-controls-prev");
     this._resultContainer = this._quiz.querySelector("#quiz-result");
-    this._questionNumber = 0;
+    this._descrip = this._quiz.querySelector("#quiz-descrip");
+    this._services = this._quiz.querySelector("#quiz-services");
     this._data = _.merge({}, data);
     this._resultData = {
       site: "",
@@ -26,10 +26,240 @@ class Quiz {
       design: "",
       cost: "",
     };
+    this._questionNumber = 0;
     this._devBranch = "";
     this._packageBranch = "";
     this._nextQuestion = "";
     this._prevQuestion = "";
+  }
+
+  _createQuestion(question, checkedInput) {
+    if (checkedInput) {
+      if (checkedInput.dataset.quizDevBranch) {
+        this._devBranch = checkedInput.dataset.quizDevBranch;
+      }
+
+      if (checkedInput.dataset.quizPackageBranch) {
+        this._packageBranch = checkedInput.dataset.quizPackageBranch;
+      }
+    }
+
+    this._clearAnswers();
+
+    switch (question) {
+      case questions.sites:
+        this._question.innerText = data.initQuestionLabel;
+
+        this._createAnswers(this._data.sites, {
+          nextQuestion: questions.packages,
+          devBranch: true,
+        });
+
+        this._answers.querySelectorAll("input").forEach((radio) => {
+          radio.addEventListener("change", () => {
+            const site = radio.dataset.quizDevBranch;
+
+            this._data.sites[site].input.checked = true;
+
+            for (const [key, value] of Object.entries(this._data.sites)) {
+              if (site !== key) {
+                value.input.checked = false;
+              }
+            }
+          });
+        });
+
+        break;
+
+      case questions.packages:
+        this._question.innerText = this._data.packages.question;
+
+        this._prevQuestion = questions.sites;
+
+        this._createAnswers(this._data.packages.types, {
+          nextQuestion:
+            this._devBranch !== "landing"
+              ? this._data.packages.nextQuestion
+              : this._data.sites[this._devBranch].packages.nextQuestion,
+          packageBranch: true,
+        });
+
+        this._answers
+          .querySelectorAll("input[type='radio']")
+          .forEach((radio) => {
+            if (radio.checked) {
+              this._packageBranch = radio.dataset.quizPackageBranch;
+
+              this._data.packages.types[
+                this._packageBranch
+              ].input.checked = true;
+
+              for (const [key, value] of Object.entries(
+                this._data.packages.types
+              )) {
+                if (this._packageBranch !== key) {
+                  value.input.checked = false;
+                }
+              }
+
+              this._createDescrip(
+                this._data.sites[this._devBranch].packages.types[
+                  this._packageBranch
+                ].descrip
+              );
+
+              if (
+                this._packageBranch === "personal" &&
+                this._devBranch !== "landing"
+              ) {
+                this._createServices(
+                  this._data.sites[this._devBranch].packages.types[
+                    this._packageBranch
+                  ].inputs
+                );
+
+                this._services
+                  .querySelectorAll("input[type='checkbox']")
+                  .forEach((checkbox) => {
+                    checkbox.addEventListener("change", () => {
+                      const packageName = checkbox.value;
+
+                      for (const [_, value] of Object.entries(
+                        this._data.sites[this._devBranch].packages.types[
+                          this._packageBranch
+                        ].inputs
+                      )) {
+                        if (value.value === packageName) {
+                          if (checkbox.checked) {
+                            value.checked = true;
+                          } else {
+                            value.checked = false;
+                          }
+                        }
+                      }
+                    });
+                  });
+              }
+            }
+
+            radio.addEventListener("change", () => {
+              this._packageBranch = radio.dataset.quizPackageBranch;
+
+              this._data.packages.types[
+                this._packageBranch
+              ].input.checked = true;
+
+              for (const [key, value] of Object.entries(
+                this._data.packages.types
+              )) {
+                if (this._packageBranch !== key) {
+                  value.input.checked = false;
+                }
+              }
+
+              this._createDescrip(
+                this._data.sites[this._devBranch].packages.types[
+                  this._packageBranch
+                ].descrip
+              );
+
+              if (
+                this._packageBranch === "personal" &&
+                this._devBranch !== "landing"
+              ) {
+                this._createServices(
+                  this._data.sites[this._devBranch].packages.types[
+                    this._packageBranch
+                  ].inputs
+                );
+
+                this._services
+                  .querySelectorAll("input[type='checkbox']")
+                  .forEach((checkbox) => {
+                    checkbox.addEventListener("change", () => {
+                      const packageName = checkbox.value;
+
+                      for (const [_, value] of Object.entries(
+                        this._data.sites[this._devBranch].packages.types[
+                          this._packageBranch
+                        ].inputs
+                      )) {
+                        if (value.value === packageName) {
+                          if (checkbox.checked) {
+                            value.checked = true;
+                          } else {
+                            value.checked = false;
+                          }
+                        }
+                      }
+                    });
+                  });
+              }
+            });
+          });
+
+        break;
+
+      case questions.engines:
+        this._question.innerText =
+          this._data.sites[this._devBranch].engines.question;
+
+        this._prevQuestion = questions.packages;
+
+        this._createAnswers(this._data.sites[this._devBranch].engines.types, {
+          nextQuestion: this._data.sites[this._devBranch].engines.nextQuestion,
+        });
+
+        this._answers.querySelectorAll("input").forEach((radio) => {
+          radio.addEventListener("change", () => {
+            const engineName = radio.value;
+
+            for (const [_, value] of Object.entries(
+              this._data.sites[this._devBranch].engines.types
+            )) {
+              if (value.value === engineName) {
+                value.checked = true;
+              } else {
+                value.checked = false;
+              }
+            }
+          });
+        });
+
+        break;
+
+      case questions.design:
+        this._question.innerText = this._data.design.question;
+
+        this._prevQuestion = questions.engines;
+
+        this._createAnswers(this._data.design.types, {
+          nextQuestion: this._data.design.nextQuestion,
+        });
+
+        this._answers.querySelectorAll("input").forEach((radio) => {
+          radio.addEventListener("change", () => {
+            const design = radio.value;
+
+            for (const [_, value] of Object.entries(this._data.design.types)) {
+              if (value.value === design) {
+                value.checked = true;
+              } else {
+                value.checked = false;
+              }
+            }
+          });
+        });
+
+        break;
+
+      default:
+        this._question.innerText = "Результат";
+        this._hideControls();
+        this._createResult();
+
+        break;
+    }
   }
 
   _createInput({
@@ -72,20 +302,13 @@ class Quiz {
     return inputTemplate;
   }
 
-  _clearAnswers() {
-    this._answers.innerHTML = "";
-  }
+  _createDescrip(obj) {
+    this._clearDescrip();
+    this._clearServices();
 
-  _displayPrevButton() {
-    if (this._questionNumber) {
-      this._prevBtn.classList.add("active");
-    } else {
-      this._prevBtn.classList.remove("active");
+    for (const [_, value] of Object.entries(obj)) {
+      this._descrip.insertAdjacentHTML("beforeend", `<li>${value}</li>`);
     }
-  }
-
-  _hideControls() {
-    this._controls.classList.add("hidden");
   }
 
   _initPrevButton() {
@@ -101,6 +324,14 @@ class Quiz {
       this._questionNumber -= 1;
       this._displayPrevButton();
 
+      if (this._prevQuestion === questions.packages) {
+        this._descrip.classList.add("active");
+        this._services.classList.add("active");
+      } else {
+        this._descrip.classList.remove("active");
+        this._services.classList.remove("active");
+      }
+
       this._createQuestion(this._prevQuestion, input);
     });
   }
@@ -115,6 +346,14 @@ class Quiz {
 
       this._questionNumber += 1;
       this._displayPrevButton();
+
+      if (this._nextQuestion === questions.packages) {
+        this._descrip.classList.add("active");
+        this._services.classList.add("active");
+      } else {
+        this._descrip.classList.remove("active");
+        this._services.classList.remove("active");
+      }
 
       this._createQuestion(this._nextQuestion, checkedInput);
     });
@@ -135,15 +374,21 @@ class Quiz {
   }
 
   _createResultServices() {
-    const services = this._data.sites[this._devBranch].packages.types[
+    const staticServices = this._data.sites[this._devBranch].packages.types[
       this._packageBranch
-    ]
-      .filter(({ checked }) => checked === true)
+    ].descrip.map((service) => " " + service.toLowerCase());
+
+    const dynamicServices = this._data.sites[this._devBranch].packages.types[
+      this._packageBranch
+    ].inputs
+      ?.filter(({ checked }) => checked === true)
       .map((service) => " " + service.label.toLowerCase());
 
-    this._resultData.services = services;
+    this._resultData.services = dynamicServices
+      ? staticServices.concat(dynamicServices)
+      : staticServices;
 
-    this._appendResult("Функционал", services);
+    this._appendResult("Функционал", this._resultData.services);
   }
 
   _createResultEngine() {
@@ -162,6 +407,9 @@ class Quiz {
     const design = this._data.design.types.find(
       ({ checked }) => checked === true
     );
+
+    if (!design) return;
+
     this._resultData.design = design.label.toLowerCase();
 
     this._appendResult("Дизайн", design.label.toLowerCase());
@@ -176,7 +424,7 @@ class Quiz {
   _createPdfLink() {
     this._resultContainer.insertAdjacentHTML(
       "beforeend",
-      `<a href="#" download>Скачать</a>`
+      `<a href="#" download>Скачать PDF-документ</a>`
     );
   }
 
@@ -189,15 +437,30 @@ class Quiz {
     };
 
     const pdf = pdfMake.createPdf(docDefinition);
-    console.log(pdf);
-    // pdf.write("docs/cost.pdf").then(
-    //   () => {
-    //     console.log(new Date() - now);
-    //   },
-    //   (err) => {
-    //     console.error(err);
-    //   }
-    // );
+  }
+
+  _clearAnswers() {
+    this._answers.innerHTML = "";
+  }
+
+  _clearDescrip() {
+    this._descrip.innerHTML = "";
+  }
+
+  _clearServices() {
+    this._services.innerHTML = "";
+  }
+
+  _displayPrevButton() {
+    if (this._questionNumber) {
+      this._prevBtn.classList.add("active");
+    } else {
+      this._prevBtn.classList.remove("active");
+    }
+  }
+
+  _hideControls() {
+    this._controls.classList.add("hidden");
   }
 
   _createResult() {
@@ -210,6 +473,23 @@ class Quiz {
     this._createResultCost();
     this._createPdf();
     this._createPdfLink();
+  }
+
+  _createServices(obj) {
+    this._clearServices();
+
+    for (const [_, value] of Object.entries(obj)) {
+      this._services.insertAdjacentHTML(
+        "beforeend",
+        this._createInput({
+          label: value.input ? value.input.label : value.label,
+          type: value.input ? value.input.type : value.type,
+          name: value.input ? value.input.name : value.name,
+          value: value.input ? value.input.value : value.value,
+          checked: value.input ? value.input.checked : value.checked,
+        })
+      );
+    }
   }
 
   _createAnswers(
@@ -236,175 +516,6 @@ class Quiz {
           prevQuestion: prevQuestion,
         })
       );
-    }
-  }
-
-  _createQuestion(question, checkedInput) {
-    if (checkedInput) {
-      if (checkedInput.dataset.quizDevBranch) {
-        this._devBranch = checkedInput.dataset.quizDevBranch;
-      }
-
-      if (checkedInput.dataset.quizPackageBranch) {
-        this._packageBranch = checkedInput.dataset.quizPackageBranch;
-      }
-
-      this._nextQuestion = checkedInput.dataset.quizNextQuestion;
-    }
-
-    this._clearAnswers();
-
-    switch (question) {
-      case questions.sites:
-        this._question.innerText = data.initQuestionLabel;
-
-        this._createAnswers(this._data.sites, {
-          nextQuestion: questions.packages,
-          devBranch: true,
-        });
-
-        this._answers.querySelectorAll("input").forEach((radio) => {
-          radio.addEventListener("change", () => {
-            const site = radio.dataset.quizDevBranch;
-
-            this._data.sites[site].input.checked = true;
-
-            for (const [key, value] of Object.entries(this._data.sites)) {
-              if (site !== key) {
-                value.input.checked = false;
-              }
-            }
-          });
-        });
-
-        break;
-
-      case questions.packages:
-        this._question.innerText = this._data.packages.question;
-
-        this._prevQuestion = questions.sites;
-
-        this._createAnswers(this._data.packages.types, {
-          nextQuestion: this._data.packages.nextQuestion,
-          packageBranch: true,
-        });
-
-        this._answers.querySelectorAll("input").forEach((radio) => {
-          radio.addEventListener("change", () => {
-            const packageBranch = radio.dataset.quizPackageBranch;
-
-            this._data.packages.types[packageBranch].input.checked = true;
-
-            for (const [key, value] of Object.entries(
-              this._data.packages.types
-            )) {
-              if (packageBranch !== key) {
-                value.input.checked = false;
-              }
-            }
-          });
-        });
-
-        break;
-
-      case questions.services:
-        this._question.innerText =
-          this._data.sites[this._devBranch].packages.question;
-
-        this._prevQuestion = questions.packages;
-
-        this._createAnswers(
-          this._data.sites[this._devBranch].packages.types[this._packageBranch],
-          {
-            nextQuestion:
-              this._data.sites[this._devBranch].packages.nextQuestion,
-          }
-        );
-
-        this._answers.querySelectorAll("input").forEach((checkbox) => {
-          checkbox.addEventListener("change", () => {
-            const packageName = checkbox.value;
-
-            for (const [_, value] of Object.entries(
-              this._data.sites[this._devBranch].packages.types[
-                this._packageBranch
-              ]
-            )) {
-              if (value.value === packageName) {
-                if (checkbox.checked) {
-                  value.checked = true;
-                } else {
-                  value.checked = false;
-                }
-              }
-            }
-          });
-        });
-
-        break;
-
-      case questions.engines:
-        this._question.innerText =
-          this._data.sites[this._devBranch].engines.question;
-
-        this._prevQuestion = questions.services;
-
-        this._createAnswers(this._data.sites[this._devBranch].engines.types, {
-          nextQuestion: this._data.sites[this._devBranch].engines.nextQuestion,
-        });
-
-        this._answers.querySelectorAll("input").forEach((radio) => {
-          radio.addEventListener("change", () => {
-            const engineName = radio.value;
-
-            for (const [_, value] of Object.entries(
-              this._data.sites[this._devBranch].engines.types
-            )) {
-              if (value.value === engineName) {
-                value.checked = true;
-              } else {
-                value.checked = false;
-              }
-            }
-          });
-        });
-
-        break;
-
-      case questions.design:
-        this._question.innerText = this._data.design.question;
-
-        if (this._devBranch !== "landing") {
-          this._prevQuestion = questions.engines;
-        } else {
-          this._prevQuestion = questions.services;
-        }
-
-        this._createAnswers(this._data.design.types, {
-          nextQuestion: this._data.design.nextQuestion,
-        });
-
-        this._answers.querySelectorAll("input").forEach((radio) => {
-          radio.addEventListener("change", () => {
-            const design = radio.value;
-
-            for (const [_, value] of Object.entries(this._data.design.types)) {
-              if (value.value === design) {
-                value.checked = true;
-              } else {
-                value.checked = false;
-              }
-            }
-          });
-        });
-
-        break;
-
-      default:
-        this._question.innerText = "Результат";
-        this._hideControls();
-        this._createResult();
-        break;
     }
   }
 

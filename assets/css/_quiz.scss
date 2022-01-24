@@ -52,6 +52,25 @@
   flex-direction: column;
 }
 
+.quiz__descrip {
+  display: none;
+
+  padding-left: 2rem;
+  margin-bottom: 2rem;
+
+  &.active {
+    display: block;
+  }
+}
+
+.quiz__services {
+  display: none;
+
+  &.active {
+    display: block;
+  }
+}
+
 .quiz__result {
   display: none;
 

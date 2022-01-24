@@ -392,7 +392,7 @@ li {
 }
 
 li {
-  list-style: none;
+  list-style: disc;
 }
 
 h1,
@@ -789,6 +789,24 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+}
+
+.quiz__descrip {
+  display: none;
+  padding-left: 2rem;
+  margin-bottom: 2rem;
+}
+
+.quiz__descrip.active {
+  display: block;
+}
+
+.quiz__services {
+  display: none;
+}
+
+.quiz__services.active {
+  display: block;
 }
 
 .quiz__result {
