@@ -366,33 +366,35 @@ class Quiz {
         this._data.sites[this._devBranch].packages.types[this._packageBranch]
           .hours;
 
-      return (cost =
+      const cmsHours = this._data.sites[this._devBranch].engines.types.find(
+        ({ checked }) => checked === true
+      ).hours;
+
+      this._resultData.cost =
         hours.design * this._costPerHour.design +
         hours.frontend * this._costPerHour.frontend +
-        hours.backend * this._costPerHour.backend);
+        (hours.backend + cmsHours) * this._costPerHour.backend;
     };
 
     const calcWithAdditionalServices = () => {};
 
-    let cost = 0;
-
     switch (this._devBranch) {
       case "landing":
-        cost = calcWithoutAdditionalServices();
+        calcWithoutAdditionalServices();
         break;
 
       case "promo":
         switch (this._packageBranch) {
           case "standard":
-            cost = calcWithoutAdditionalServices();
+            calcWithoutAdditionalServices();
             break;
 
           case "expanded":
-            cost = calcWithoutAdditionalServices();
+            calcWithoutAdditionalServices();
             break;
 
           case "personal":
-            cost = calcWithAdditionalServices();
+            calcWithAdditionalServices();
             break;
 
           default:
@@ -403,15 +405,15 @@ class Quiz {
       case "catalog":
         switch (this._packageBranch) {
           case "standard":
-            cost = calcWithoutAdditionalServices();
+            calcWithoutAdditionalServices();
             break;
 
           case "expanded":
-            cost = calcWithoutAdditionalServices();
+            calcWithoutAdditionalServices();
             break;
 
           case "personal":
-            cost = calcWithAdditionalServices();
+            calcWithAdditionalServices();
             break;
 
           default:
@@ -422,15 +424,15 @@ class Quiz {
       case "store":
         switch (this._packageBranch) {
           case "standard":
-            cost = calcWithoutAdditionalServices();
+            calcWithoutAdditionalServices();
             break;
 
           case "expanded":
-            cost = calcWithoutAdditionalServices();
+            calcWithoutAdditionalServices();
             break;
 
           case "personal":
-            cost = calcWithAdditionalServices();
+            calcWithAdditionalServices();
             break;
 
           default:
@@ -442,7 +444,7 @@ class Quiz {
         break;
     }
 
-    this._appendResult("Стоимость", `${cost} BYN`);
+    this._appendResult("Стоимость", `${this._resultData.cost} BYN`);
   }
 
   _createPdf() {
