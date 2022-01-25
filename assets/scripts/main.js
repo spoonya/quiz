@@ -19,9 +19,9 @@ class Quiz {
     this._descrip = this._quiz.querySelector("#quiz-descrip");
     this._services = this._quiz.querySelector("#quiz-services");
     this._costPerHour = {
-      design: this._quiz.querySelector("#quiz-design-per-hour").value,
-      frontend: this._quiz.querySelector("#quiz-frontend-per-hour").value,
-      backend: this._quiz.querySelector("#quiz-backend-per-hour").value,
+      design: +this._quiz.querySelector("#quiz-design-per-hour").value,
+      frontend: +this._quiz.querySelector("#quiz-frontend-per-hour").value,
+      backend: +this._quiz.querySelector("#quiz-backend-per-hour").value,
     };
     this._data = _.merge({}, data);
     this._resultData = {
@@ -361,7 +361,7 @@ class Quiz {
   }
 
   _createResultCost() {
-    const calcWithoutAdditionalServices = () => {
+    const calcLanding = () => {
       const hours =
         this._data.sites[this._devBranch].packages.types[this._packageBranch]
           .hours;
@@ -376,11 +376,55 @@ class Quiz {
         (hours.backend + cmsHours) * this._costPerHour.backend;
     };
 
-    const calcWithAdditionalServices = () => {};
+    const calcWithoutAdditionalServices = () => {
+      const cmsHours = this._data.sites[this._devBranch].engines.types.find(
+        ({ checked }) => checked === true
+      ).hours[this._packageBranch];
+
+      if (this._resultData.design === "шаблон") {
+        this._resultData.cost = cmsHours * this._costPerHour.backend;
+      } else {
+        const designHours = this._data.design.types.find(
+          ({ checked }) => checked === true
+        ).hours[this._devBranch];
+
+        this._resultData.cost =
+          cmsHours * this._costPerHour.backend +
+          designHours.design * this._costPerHour.design +
+          designHours.frontend * this._costPerHour.frontend;
+      }
+    };
+
+    const calcWithAdditionalServices = () => {
+      const cmsHours = this._data.sites[this._devBranch].engines.types.find(
+        ({ checked }) => checked === true
+      ).hours[this._packageBranch];
+
+      const servicesHours = this._data.sites[this._devBranch].packages.types[
+        this._packageBranch
+      ].inputs
+        .filter(({ checked }) => checked === true)
+        .reduce((acc, next) => acc + next.hours, 0);
+
+      const backendHours = cmsHours + servicesHours;
+
+      if (this._resultData.design === "шаблон") {
+        this._resultData.cost = backendHours * this._costPerHour.backend;
+      } else {
+        const designHours = this._data.design.types.find(
+          ({ checked }) => checked === true
+        ).hours[this._devBranch];
+
+        this._resultData.cost =
+          backendHours * this._costPerHour.backend +
+          designHours.design * this._costPerHour.design +
+          designHours.frontend * this._costPerHour.frontend;
+      }
+    };
 
     switch (this._devBranch) {
       case "landing":
-        calcWithoutAdditionalServices();
+        calcLanding();
         break;
 
       case "promo":

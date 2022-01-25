@@ -92,6 +92,8 @@
     border-bottom: 1px solid;
     color: $color-blue-beta;
 
+    margin-top: 3rem;
+
     &:hover {
       color: lighten($color-blue-alpha, 10);
     }

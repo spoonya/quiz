@@ -166,11 +166,6 @@ export const data = {
         nextQuestion: "engines",
         types: {
           standard: {
-            hours: {
-              frontend: 0,
-              design: 0,
-              backend: 0,
-            },
             descrip: [
               "главная",
               "контакты",
@@ -182,11 +177,6 @@ export const data = {
             ],
           },
           expanded: {
-            hours: {
-              frontend: 0,
-              design: 0,
-              backend: 10,
-            },
             descrip: [
               "главная",
               "контакты",
@@ -280,7 +270,11 @@ export const data = {
             type: "radio",
             value: "framework",
             checked: false,
-            hours: 250,
+            hours: {
+              standard: 250,
+              expanded: 300,
+              personal: 500,
+            },
           },
           {
             label: "Modx Revolution",
@@ -288,7 +282,11 @@ export const data = {
             type: "radio",
             value: "Modx Revolution",
             checked: false,
-            hours: 20,
+            hours: {
+              standard: 20,
+              expanded: 30,
+              personal: 30,
+            },
           },
           {
             label: "Evolution CMS",
@@ -296,7 +294,11 @@ export const data = {
             type: "radio",
             value: "Evolution CMS",
             checked: false,
-            hours: 20,
+            hours: {
+              standard: 20,
+              expanded: 30,
+              personal: 30,
+            },
           },
           {
             label: "1C Bitrix",
@@ -304,7 +306,11 @@ export const data = {
             type: "radio",
             value: "1C Bitrix",
             checked: false,
-            hours: 20,
+            hours: {
+              standard: 20,
+              expanded: 30,
+              personal: 30,
+            },
           },
           {
             label: "Wordpress",
@@ -312,7 +318,11 @@ export const data = {
             type: "radio",
             value: "Wordpress",
             checked: false,
-            hours: 20,
+            hours: {
+              standard: 20,
+              expanded: 30,
+              personal: 30,
+            },
           },
           {
             label: "Tilda",
@@ -320,7 +330,11 @@ export const data = {
             type: "radio",
             value: "Tilda",
             checked: false,
-            hours: 20,
+            hours: {
+              standard: 20,
+              expanded: 30,
+              personal: 30,
+            },
           },
           {
             label: "October CMS",
@@ -328,7 +342,11 @@ export const data = {
             type: "radio",
             value: "October CMS",
             checked: false,
-            hours: 20,
+            hours: {
+              standard: 20,
+              expanded: 30,
+              personal: 30,
+            },
           },
         ],
       },
@@ -394,6 +412,7 @@ export const data = {
                 type: "checkbox",
                 value: "интеграция с CRM",
                 checked: false,
+                hours: 20,
               },
               {
                 label: "настройки чат-бота",
@@ -401,6 +420,7 @@ export const data = {
                 type: "checkbox",
                 value: "настройки чат-бота",
                 checked: false,
+                hours: 1,
               },
               {
                 label: "мультиязычность",
@@ -408,6 +428,7 @@ export const data = {
                 type: "checkbox",
                 value: "мультиязычность",
                 checked: false,
+                hours: 10,
               },
               {
                 label: "перевод контента",
@@ -415,6 +436,7 @@ export const data = {
                 type: "checkbox",
                 value: "перевод контента",
                 checked: false,
+                hours: 5,
               },
               {
                 label: "индивидуальные консультации и обучение по наполнению",
@@ -422,6 +444,7 @@ export const data = {
                 type: "checkbox",
                 value: "индивидуальные консультации и обучение по наполнению",
                 checked: false,
+                hours: 10,
               },
               {
                 label: "наполнение",
@@ -429,6 +452,7 @@ export const data = {
                 type: "checkbox",
                 value: "наполнение",
                 checked: false,
+                hours: 2,
               },
               {
                 label: "создание индивидуальных решений",
@@ -436,6 +460,7 @@ export const data = {
                 type: "checkbox",
                 value: "создание индивидуальных решений",
                 checked: false,
+                hours: 20,
               },
               {
                 label: "парсинг товаров",
@@ -443,6 +468,7 @@ export const data = {
                 type: "checkbox",
                 value: "парсинг товаров",
                 checked: false,
+                hours: 16,
               },
               {
                 label: "ручное заполнение",
@@ -450,6 +476,7 @@ export const data = {
                 type: "checkbox",
                 value: "ручное заполнение",
                 checked: false,
+                hours: 80,
               },
               {
                 label: "создание модификаций товаров",
@@ -457,6 +484,7 @@ export const data = {
                 type: "checkbox",
                 value: "создание модификаций товаров",
                 checked: false,
+                hours: 80,
               },
               {
                 label: "страница сравнения",
@@ -464,6 +492,7 @@ export const data = {
                 type: "checkbox",
                 value: "страница сравнения",
                 checked: false,
+                hours: 4,
               },
               {
                 label:
@@ -473,6 +502,7 @@ export const data = {
                 value:
                   "вёрстка письма для заказчика с использованием фирменного стиля",
                 checked: false,
+                hours: 2,
               },
             ],
           },
@@ -488,6 +518,11 @@ export const data = {
             type: "radio",
             value: "framework",
             checked: false,
+            hours: {
+              standard: 250,
+              expanded: 300,
+              personal: 500,
+            },
           },
           {
             label: "Modx Revolution",
@@ -495,6 +530,11 @@ export const data = {
             type: "radio",
             value: "Modx Revolution",
             checked: false,
+            hours: {
+              standard: 35,
+              expanded: 40,
+              personal: 40,
+            },
           },
           {
             label: "Evolution CMS",
@@ -502,6 +542,11 @@ export const data = {
             type: "radio",
             value: "Evolution CMS",
             checked: false,
+            hours: {
+              standard: 35,
+              expanded: 40,
+              personal: 40,
+            },
           },
           {
             label: "1C Bitrix",
@@ -509,6 +554,11 @@ export const data = {
             type: "radio",
             value: "1C Bitrix",
             checked: false,
+            hours: {
+              standard: 37,
+              expanded: 40,
+              personal: 40,
+            },
           },
           {
             label: "Wordpress",
@@ -516,6 +566,11 @@ export const data = {
             type: "radio",
             value: "Wordpress",
             checked: false,
+            hours: {
+              standard: 38,
+              expanded: 40,
+              personal: 40,
+            },
           },
           {
             label: "Tilda",
@@ -523,13 +578,11 @@ export const data = {
             type: "radio",
             value: "Tilda",
             checked: false,
-          },
-          {
-            label: "October CMS",
-            name: "движок",
-            type: "radio",
-            value: "October CMS",
-            checked: false,
+            hours: {
+              standard: 39,
+              expanded: 40,
+              personal: 40,
+            },
           },
         ],
       },
@@ -595,6 +648,7 @@ export const data = {
                 type: "checkbox",
                 value: "личный кабинет",
                 checked: false,
+                hours: 20,
               },
               {
                 label: "история заказов",
@@ -602,6 +656,7 @@ export const data = {
                 type: "checkbox",
                 value: "история заказов",
                 checked: false,
+                hours: 2,
               },
               {
                 label: "программа лояльности",
@@ -609,6 +664,7 @@ export const data = {
                 type: "checkbox",
                 value: "программа лояльности",
                 checked: false,
+                hours: 2,
               },
               {
                 label: "промокоды",
@@ -616,6 +672,7 @@ export const data = {
                 type: "checkbox",
                 value: "промокоды",
                 checked: false,
+                hours: 2,
               },
               {
                 label: "интеграция с CRM",
@@ -623,6 +680,7 @@ export const data = {
                 type: "checkbox",
                 value: "интеграция с CRM",
                 checked: false,
+                hours: 20,
               },
               {
                 label: "настройки чат-бота",
@@ -630,6 +688,7 @@ export const data = {
                 type: "checkbox",
                 value: "настройки чат-бота",
                 checked: false,
+                hours: 1,
               },
               {
                 label: "мультиязычность",
@@ -637,6 +696,7 @@ export const data = {
                 type: "checkbox",
                 value: "мультиязычность",
                 checked: false,
+                hours: 10,
               },
               {
                 label: "перевод контента",
@@ -644,6 +704,7 @@ export const data = {
                 type: "checkbox",
                 value: "перевод контента",
                 checked: false,
+                hours: 5,
               },
               {
                 label: "индивидуальные консультации и обучение по наполнению",
@@ -651,6 +712,7 @@ export const data = {
                 type: "checkbox",
                 value: "индивидуальные консультации и обучение по наполнению",
                 checked: false,
+                hours: 10,
               },
               {
                 label: "наполнение",
@@ -658,6 +720,7 @@ export const data = {
                 type: "checkbox",
                 value: "наполнение",
                 checked: false,
+                hours: 2,
               },
               {
                 label: "создание индивидуальных решений",
@@ -665,6 +728,7 @@ export const data = {
                 type: "checkbox",
                 value: "создание индивидуальных решений",
                 checked: false,
+                hours: 20,
               },
               {
                 label: "парсинг товаров",
@@ -672,6 +736,7 @@ export const data = {
                 type: "checkbox",
                 value: "парсинг товаров",
                 checked: false,
+                hours: 16,
               },
               {
                 label: "ручное заполнение",
@@ -679,6 +744,7 @@ export const data = {
                 type: "checkbox",
                 value: "ручное заполнение",
                 checked: false,
+                hours: 80,
               },
               {
                 label: "создание модификаций товаров",
@@ -686,6 +752,7 @@ export const data = {
                 type: "checkbox",
                 value: "создание модификаций товаров",
                 checked: false,
+                hours: 80,
               },
               {
                 label: "страница сравнения",
@@ -693,6 +760,7 @@ export const data = {
                 type: "checkbox",
                 value: "страница сравнения",
                 checked: false,
+                hours: 4,
               },
               {
                 label:
@@ -702,6 +770,7 @@ export const data = {
                 value:
                   "вёрстка письма для заказчика с использованием фирменного стиля",
                 checked: false,
+                hours: 2,
               },
             ],
           },
@@ -712,18 +781,16 @@ export const data = {
         nextQuestion: "design",
         types: [
           {
-            label: "Framework",
-            name: "движок",
-            type: "radio",
-            value: "framework",
-            checked: false,
-          },
-          {
             label: "Modx Revolution",
             name: "движок",
             type: "radio",
             value: "Modx Revolution",
             checked: false,
+            hours: {
+              standard: 80,
+              expanded: 120,
+              personal: 120,
+            },
           },
           {
             label: "Evolution CMS",
@@ -731,6 +798,11 @@ export const data = {
             type: "radio",
             value: "Evolution CMS",
             checked: false,
+            hours: {
+              standard: 80,
+              expanded: 120,
+              personal: 120,
+            },
           },
           {
             label: "1C Bitrix",
@@ -738,6 +810,11 @@ export const data = {
             type: "radio",
             value: "1C Bitrix",
             checked: false,
+            hours: {
+              standard: 80,
+              expanded: 120,
+              personal: 120,
+            },
           },
           {
             label: "Wordpress",
@@ -745,6 +822,11 @@ export const data = {
             type: "radio",
             value: "Wordpress",
             checked: false,
+            hours: {
+              standard: 80,
+              expanded: 120,
+              personal: 120,
+            },
           },
           {
             label: "Tilda",
@@ -752,13 +834,11 @@ export const data = {
             type: "radio",
             value: "Tilda",
             checked: false,
-          },
-          {
-            label: "October CMS",
-            name: "движок",
-            type: "radio",
-            value: "October CMS",
-            checked: false,
+            hours: {
+              standard: 80,
+              expanded: 120,
+              personal: 120,
+            },
           },
         ],
       },
@@ -774,6 +854,20 @@ export const data = {
         type: "radio",
         value: "индивидуальынй дизайн",
         checked: false,
+        hours: {
+          promo: {
+            design: 40,
+            frontend: 40,
+          },
+          catalog: {
+            design: 50,
+            frontend: 70,
+          },
+          store: {
+            design: 50,
+            frontend: 70,
+          },
+        },
       },
       {
         label: "Шаблон",

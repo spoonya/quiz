@@ -828,6 +828,7 @@ body {
 .quiz__result button {
   border-bottom: 1px solid;
   color: #0a3d76;
+  margin-top: 3rem;
 }
 
 .quiz__result button:hover {
