@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.1/vfs_fonts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.js"></script>
     <link rel="stylesheet" href="assets/css/style.css" />
     <title>Quiz</title>
   </head>
@@ -17,6 +17,24 @@
           <h3>Калькулятор стоимости</h3>
         </div>
         <form class="quiz__content form" action="#" method="post">
+          <input
+            id="quiz-design-per-hour"
+            type="hidden"
+            name="дизайн-стоимость"
+            value="12"
+          />
+          <input
+            id="quiz-frontend-per-hour"
+            type="hidden"
+            name="вёрстка-стоимость"
+            value="12"
+          />
+          <input
+            id="quiz-backend-per-hour"
+            type="hidden"
+            name="бэкенд-стоимость"
+            value="16"
+          />
           <h4 id="quiz-question" class="quiz__question"></h4>
           <div id="quiz-answers" class="quiz__answers"></div>
           <div id="quiz-result" class="quiz__result"></div>

@@ -45,9 +45,14 @@ export const data = {
       },
       packages: {
         question: "Функционал",
-        nextQuestion: "",
+        nextQuestion: "engines",
         types: {
           standard: {
+            hours: {
+              frontend: 0,
+              design: 0,
+              backend: 8,
+            },
             descrip: [
               "шаблонный дизайн",
               "разработка логотипа",
@@ -57,6 +62,11 @@ export const data = {
             ],
           },
           expanded: {
+            hours: {
+              frontend: 24,
+              design: 24,
+              backend: 16,
+            },
             descrip: [
               "уникальный дизайн",
               "разработка брендбука",
@@ -69,6 +79,11 @@ export const data = {
             ],
           },
           personal: {
+            hours: {
+              frontend: 24,
+              design: 24,
+              backend: 20,
+            },
             descrip: [
               "уникальный дизайн",
               "разработка брендбука",
@@ -82,6 +97,47 @@ export const data = {
             ],
           },
         },
+      },
+      engines: {
+        question: "CMS",
+        nextQuestion: "",
+        types: [
+          {
+            label: "Modx Revolution",
+            name: "движок",
+            type: "radio",
+            value: "Modx Revolution",
+            checked: false,
+          },
+          {
+            label: "Evolution CMS",
+            name: "движок",
+            type: "radio",
+            value: "Evolution CMS",
+            checked: false,
+          },
+          {
+            label: "Wordpress",
+            name: "движок",
+            type: "radio",
+            value: "Wordpress",
+            checked: false,
+          },
+          {
+            label: "Tilda",
+            name: "движок",
+            type: "radio",
+            value: "Tilda",
+            checked: false,
+          },
+          {
+            label: "October CMS",
+            name: "движок",
+            type: "radio",
+            value: "October CMS",
+            checked: false,
+          },
+        ],
       },
     },
     promo: {
@@ -97,6 +153,11 @@ export const data = {
         nextQuestion: "engines",
         types: {
           standard: {
+            hours: {
+              frontend: 24,
+              design: 24,
+              backend: 14,
+            },
             descrip: [
               "главная",
               "контакты",

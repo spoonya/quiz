@@ -18,6 +18,11 @@ class Quiz {
     this._resultContainer = this._quiz.querySelector("#quiz-result");
     this._descrip = this._quiz.querySelector("#quiz-descrip");
     this._services = this._quiz.querySelector("#quiz-services");
+    this._costPerHour = {
+      design: this._quiz.querySelector("#quiz-design-per-hour").value,
+      frontend: this._quiz.querySelector("#quiz-frontend-per-hour").value,
+      backend: this._quiz.querySelector("#quiz-backend-per-hour").value,
+    };
     this._data = _.merge({}, data);
     this._resultData = {
       site: "",
@@ -31,6 +36,52 @@ class Quiz {
     this._packageBranch = "";
     this._nextQuestion = "";
     this._prevQuestion = "";
+  }
+
+  _controlPackagesInputs(radio) {
+    this._packageBranch = radio.dataset.quizPackageBranch;
+
+    this._data.packages.types[this._packageBranch].input.checked = true;
+
+    for (const [key, value] of Object.entries(this._data.packages.types)) {
+      if (this._packageBranch !== key) {
+        value.input.checked = false;
+      }
+    }
+
+    this._createDescrip(
+      this._data.sites[this._devBranch].packages.types[this._packageBranch]
+        .descrip
+    );
+
+    if (this._packageBranch === "personal" && this._devBranch !== "landing") {
+      this._createServices(
+        this._data.sites[this._devBranch].packages.types[this._packageBranch]
+          .inputs
+      );
+
+      this._services
+        .querySelectorAll("input[type='checkbox']")
+        .forEach((checkbox) => {
+          checkbox.addEventListener("change", () => {
+            const packageName = checkbox.value;
+
+            for (const [_, value] of Object.entries(
+              this._data.sites[this._devBranch].packages.types[
+                this._packageBranch
+              ].inputs
+            )) {
+              if (value.value === packageName) {
+                if (checkbox.checked) {
+                  value.checked = true;
+                } else {
+                  value.checked = false;
+                }
+              }
+            }
+          });
+        });
+    }
   }
 
   _createQuestion(question, checkedInput) {
@@ -77,10 +128,7 @@ class Quiz {
         this._prevQuestion = questions.sites;
 
         this._createAnswers(this._data.packages.types, {
-          nextQuestion:
-            this._devBranch !== "landing"
-              ? this._data.packages.nextQuestion
-              : this._data.sites[this._devBranch].packages.nextQuestion,
+          nextQuestion: this._data.sites[this._devBranch].packages.nextQuestion,
           packageBranch: true,
         });
 
@@ -88,113 +136,11 @@ class Quiz {
           .querySelectorAll("input[type='radio']")
           .forEach((radio) => {
             if (radio.checked) {
-              this._packageBranch = radio.dataset.quizPackageBranch;
-
-              this._data.packages.types[
-                this._packageBranch
-              ].input.checked = true;
-
-              for (const [key, value] of Object.entries(
-                this._data.packages.types
-              )) {
-                if (this._packageBranch !== key) {
-                  value.input.checked = false;
-                }
-              }
-
-              this._createDescrip(
-                this._data.sites[this._devBranch].packages.types[
-                  this._packageBranch
-                ].descrip
-              );
-
-              if (
-                this._packageBranch === "personal" &&
-                this._devBranch !== "landing"
-              ) {
-                this._createServices(
-                  this._data.sites[this._devBranch].packages.types[
-                    this._packageBranch
-                  ].inputs
-                );
-
-                this._services
-                  .querySelectorAll("input[type='checkbox']")
-                  .forEach((checkbox) => {
-                    checkbox.addEventListener("change", () => {
-                      const packageName = checkbox.value;
-
-                      for (const [_, value] of Object.entries(
-                        this._data.sites[this._devBranch].packages.types[
-                          this._packageBranch
-                        ].inputs
-                      )) {
-                        if (value.value === packageName) {
-                          if (checkbox.checked) {
-                            value.checked = true;
-                          } else {
-                            value.checked = false;
-                          }
-                        }
-                      }
-                    });
-                  });
-              }
+              this._controlPackagesInputs(radio);
             }
 
             radio.addEventListener("change", () => {
-              this._packageBranch = radio.dataset.quizPackageBranch;
-
-              this._data.packages.types[
-                this._packageBranch
-              ].input.checked = true;
-
-              for (const [key, value] of Object.entries(
-                this._data.packages.types
-              )) {
-                if (this._packageBranch !== key) {
-                  value.input.checked = false;
-                }
-              }
-
-              this._createDescrip(
-                this._data.sites[this._devBranch].packages.types[
-                  this._packageBranch
-                ].descrip
-              );
-
-              if (
-                this._packageBranch === "personal" &&
-                this._devBranch !== "landing"
-              ) {
-                this._createServices(
-                  this._data.sites[this._devBranch].packages.types[
-                    this._packageBranch
-                  ].inputs
-                );
-
-                this._services
-                  .querySelectorAll("input[type='checkbox']")
-                  .forEach((checkbox) => {
-                    checkbox.addEventListener("change", () => {
-                      const packageName = checkbox.value;
-
-                      for (const [_, value] of Object.entries(
-                        this._data.sites[this._devBranch].packages.types[
-                          this._packageBranch
-                        ].inputs
-                      )) {
-                        if (value.value === packageName) {
-                          if (checkbox.checked) {
-                            value.checked = true;
-                          } else {
-                            value.checked = false;
-                          }
-                        }
-                      }
-                    });
-                  });
-              }
+              this._controlPackagesInputs(radio);
             });
           });
 
@@ -257,7 +203,6 @@ class Quiz {
         this._question.innerText = "Результат";
         this._hideControls();
         this._createResult();
-
         break;
     }
   }
@@ -416,33 +361,158 @@ class Quiz {
   }
 
   _createResultCost() {
-    this._resultData.cost = 1000;
+    const calcWithoutAdditionalServices = () => {
+      const hours =
+        this._data.sites[this._devBranch].packages.types[this._packageBranch]
+          .hours;
 
-    this._appendResult("Стоимость", "BYN");
+      return (cost =
+        hours.design * this._costPerHour.design +
+        hours.frontend * this._costPerHour.frontend +
+        hours.backend * this._costPerHour.backend);
+    };
+
+    const calcWithAdditionalServices = () => {};
+
+    let cost = 0;
+
+    switch (this._devBranch) {
+      case "landing":
+        cost = calcWithoutAdditionalServices();
+        break;
+
+      case "promo":
+        switch (this._packageBranch) {
+          case "standard":
+            cost = calcWithoutAdditionalServices();
+            break;
+
+          case "expanded":
+            cost = calcWithoutAdditionalServices();
+            break;
+
+          case "personal":
+            cost = calcWithAdditionalServices();
+            break;
+
+          default:
+            break;
+        }
+        break;
+
+      case "catalog":
+        switch (this._packageBranch) {
+          case "standard":
+            cost = calcWithoutAdditionalServices();
+            break;
+
+          case "expanded":
+            cost = calcWithoutAdditionalServices();
+            break;
+
+          case "personal":
+            cost = calcWithAdditionalServices();
+            break;
+
+          default:
+            break;
+        }
+        break;
+
+      case "store":
+        switch (this._packageBranch) {
+          case "standard":
+            cost = calcWithoutAdditionalServices();
+            break;
+
+          case "expanded":
+            cost = calcWithoutAdditionalServices();
+            break;
+
+          case "personal":
+            cost = calcWithAdditionalServices();
+            break;
+
+          default:
+            break;
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    this._appendResult("Стоимость", `${cost} BYN`);
   }
 
-  _createPdfLink() {
+  _createPdf() {
     this._resultContainer.insertAdjacentHTML(
       "beforeend",
-      `<button id="quiz-pdf-generator" href="#" download>Скачать PDF-документ</button>`
+      `<button id="quiz-pdf-generator" type='button'>Скачать PDF-документ</button>`
     );
 
     const pdfButton = this._resultContainer.querySelector(
       "#quiz-pdf-generator"
     );
 
-    pdfButton.addEventListener("click", this._createPdf);
-  }
+    var externalDataRetrievedFromServer = [
+      { name: "Bartek", age: 34 },
+      { name: "John", age: 27 },
+      { name: "Elizabeth", age: 30 },
+    ];
 
-  _createPdf() {
+    function buildTableBody(data, columns) {
+      const body = [];
+
+      body.push(columns);
+
+      data.forEach((row) => {
+        const dataRow = [];
+
+        columns.forEach((column) => {
+          dataRow.push(row[column].toString());
+        });
+
+        body.push(dataRow);
+      });
+
+      return body;
+    }
+
+    function table(data, columns) {
+      return {
+        table: {
+          headerRows: 1,
+          body: buildTableBody(data, columns),
+        },
+      };
+    }
+
     const docDefinition = {
       content: [
-        "First paragraph",
-        "Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines",
+        { text: "Перечень услуг", style: "header" },
+        table(externalDataRetrievedFromServer, ["name", "age"]),
       ],
+      styles: {
+        table: {},
+        header: {
+          fontSize: 16,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+        tableHeader: {
+          bold: true,
+          fontSize: 14,
+        },
+        total: {
+          bold: true,
+        },
+      },
     };
 
-    pdfMake.createPdf(docDefinition).download("cost.pdf");
+    pdfButton.addEventListener("click", () =>
+      pdfMake.createPdf(docDefinition).download("cost.pdf")
+    );
   }
 
   _clearAnswers() {
@@ -477,7 +547,8 @@ class Quiz {
     this._createResultEngine();
     this._createResultDesign();
     this._createResultCost();
-    this._createPdfLink();
+    this._createPdf();
+    console.log(this._resultData);
   }
 
   _createServices(obj) {
