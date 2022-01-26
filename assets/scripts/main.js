@@ -363,11 +363,15 @@ class Quiz {
       ({ checked }) => checked === true
     );
 
-    if (!design) return;
+    if (!design) {
+      this._packageBranch !== "standard"
+        ? (this._resultData.design = "индивидуальный дизайн")
+        : (this._resultData.design = "шаблон");
+    } else {
+      this._resultData.design = design.label.toLowerCase();
+    }
 
-    this._resultData.design = design.label.toLowerCase();
-
-    this._appendResult("Дизайн", design.label.toLowerCase());
+    this._appendResult("Дизайн", this._resultData.design.toLowerCase());
   }
 
   _createPdfData() {
@@ -379,30 +383,85 @@ class Quiz {
       for (let i = 0; i < services.length; i++) {
         const label = services[i];
 
-        this._pdfDataServices.static.push({
-          service: label,
-          cost: this._resultData.cost - dynamicServicesCost,
-        });
-      }
+        switch (this._devBranch) {
+          case "landing":
+            switch (this._packageBranch) {
+              case "standard":
+                this._pdfDataServices.static.push({
+                  service: label,
+                  cost: this._resultData.cost - dynamicServicesCost,
+                });
+                break;
 
-      if (
-        this._devBranch !== "landing" &&
-        this._resultData.design !== "шаблон"
-      ) {
-        const designHours = this._data.design.types.find(
-          ({ checked }) => checked === true
-        ).hours[this._devBranch];
+              default:
+                const hours =
+                  this._data.sites[this._devBranch].packages.types[
+                    this._packageBranch
+                  ].hours;
 
-        this._pdfDataServices.dynamic.push({
-          service: "дизайн",
-          cost:
-            this._resultData.cost - designHours.design - dynamicServicesCost,
-        });
+                this._pdfDataServices.static.push({
+                  service: label,
+                  cost:
+                    this._resultData.cost -
+                    hours.design * this._costPerHour.design -
+                    hours.frontend * this._costPerHour.frontend,
+                });
 
-        this._pdfDataServices.dynamic.push({
-          service: "вёрстка",
-          cost: designHours.hours,
-        });
+                if (i + 1 >= services.length) {
+                  this._pdfDataServices.dynamic.push({
+                    service: "разработка дизайна",
+                    cost: hours.design * this._costPerHour.design,
+                  });
+
+                  this._pdfDataServices.dynamic.push({
+                    service: "вёрстка",
+                    cost: hours.frontend * this._costPerHour.frontend,
+                  });
+                }
+
+                break;
+            }
+            break;
+
+          default:
+            switch (this._resultData.design) {
+              case "шаблон":
+                this._pdfDataServices.static.push({
+                  service: label,
+                  cost: this._resultData.cost - dynamicServicesCost,
+                });
+                break;
+
+              default:
+                const designFrontendHours = this._data.design.types.find(
+                  ({ checked }) => checked === true
+                ).hours[this._devBranch];
+
+                this._pdfDataServices.static.push({
+                  service: label,
+                  cost:
+                    this._resultData.cost -
+                    dynamicServicesCost -
+                    designFrontendHours.design * this._costPerHour.design -
+                    designFrontendHours.frontend * this._costPerHour.frontend,
+                });
+
+                if (i + 1 >= services.length) {
+                  this._pdfDataServices.dynamic.push({
+                    service: "разработка дизайна",
+                    cost: designFrontendHours.design * this._costPerHour.design,
+                  });
+
+                  this._pdfDataServices.dynamic.push({
+                    service: "вёрстка",
+                    cost:
+                      designFrontendHours.frontend * this._costPerHour.frontend,
+                  });
+                }
+                break;
+            }
+            break;
+        }
       }
     };
 
@@ -432,14 +491,6 @@ class Quiz {
 
       default:
         switch (this._packageBranch) {
-          case "standard":
-            createStaticServices(staticServices);
-            break;
-
-          case "expanded":
-            createStaticServices(staticServices);
-            break;
-
           case "personal":
             const dynamicServices = this._data.sites[
               this._devBranch
@@ -453,6 +504,7 @@ class Quiz {
             break;
 
           default:
+            createStaticServices(staticServices);
             break;
         }
         break;
@@ -657,7 +709,7 @@ class Quiz {
     const basicInfo = [
       `Тип сайта: ${this._resultData.site}\n`,
       `CMS: ${this._resultData.cms}\n`,
-      this._resultData.design ? `Дизайн: ${this._resultData.design}` : "",
+      `Дизайн: ${this._resultData.design}`,
     ];
 
     const docDefinition = {
