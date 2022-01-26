@@ -575,10 +575,11 @@ class Quiz {
 
         cols.forEach((col) => {
           let span = 0;
+          const rowHeight = 8;
 
           if (col === "cost") {
             span = this._pdfDataServices.static.length;
-            margin = [0, 7 * span, 0, 0];
+            margin = [0, rowHeight * span, 0, 0];
 
             dataRow.push({
               text: getPropValueByKey(row, col),
@@ -650,7 +651,7 @@ class Quiz {
         { text: "Перечень услуг", style: "tableTitle" },
         table({
           cols: ["service", "cost"],
-          width: ["*", "*"],
+          width: ["*", 120],
           showHeaders: true,
           headers: [
             {
