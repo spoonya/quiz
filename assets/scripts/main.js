@@ -384,6 +384,26 @@ class Quiz {
           cost: this._resultData.cost - dynamicServicesCost,
         });
       }
+
+      if (
+        this._devBranch !== "landing" &&
+        this._resultData.design !== "шаблон"
+      ) {
+        const designHours = this._data.design.types.find(
+          ({ checked }) => checked === true
+        ).hours[this._devBranch];
+
+        this._pdfDataServices.dynamic.push({
+          service: "дизайн",
+          cost:
+            this._resultData.cost - designHours.design - dynamicServicesCost,
+        });
+
+        this._pdfDataServices.dynamic.push({
+          service: "вёрстка",
+          cost: designHours.hours,
+        });
+      }
     };
 
     const createDynamicServices = (services) => {
@@ -643,7 +663,7 @@ class Quiz {
     const docDefinition = {
       content: [
         {
-          width: 140,
+          width: 135,
           margin: [0, 0, 0, 15],
           alignment: "right",
           image:
