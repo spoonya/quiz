@@ -29,6 +29,11 @@
       width: 50%;
       height: 50%;
     }
+
+    &--small {
+      min-width: 20px;
+      min-height: 20px;
+    }
   }
 }
 
@@ -92,7 +97,7 @@
     border-bottom: 1px solid;
     color: $color-blue-beta;
 
-    margin-top: 3rem;
+    margin-top: 2rem;
 
     &:hover {
       color: lighten($color-blue-alpha, 10);

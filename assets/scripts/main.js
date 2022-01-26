@@ -24,6 +24,10 @@ class Quiz {
       backend: +this._quiz.querySelector("#quiz-backend-per-hour").value,
     };
     this._data = _.merge({}, data);
+    this._pdfDataServices = {
+      static: [],
+      dynamic: [],
+    };
     this._resultData = {
       site: "",
       services: [],
@@ -207,17 +211,20 @@ class Quiz {
     }
   }
 
-  _createInput({
-    label,
-    type,
-    name,
-    value,
-    checked,
-    devBranch,
-    packageBranch,
-    nextQuestion,
-    prevQuestion,
-  }) {
+  _createInput(
+    {
+      label,
+      type,
+      name,
+      value,
+      checked,
+      devBranch,
+      packageBranch,
+      nextQuestion,
+      prevQuestion,
+    },
+    isSmall = false
+  ) {
     const inputTemplate = `<div class="form__control">
                             <label class="form__checkbox-wrapper">
                               <input
@@ -238,7 +245,10 @@ class Quiz {
                                 }"
                                 hidden="hidden"
                               />
-                              <span class="form__checkbox-styled"></span>
+                              <span class="form__checkbox-styled ${
+                                isSmall ? "form__checkbox-styled--small" : ""
+                              }">
+                              </span>
                               <span class="form__checkbox-txt">${label}</span>
                               <span class="form__error"></span>
                             </label>
@@ -360,6 +370,77 @@ class Quiz {
     this._appendResult("Дизайн", design.label.toLowerCase());
   }
 
+  _createPdfData() {
+    const staticServices =
+      this._data.sites[this._devBranch].packages.types[this._packageBranch]
+        .descrip;
+
+    const createStaticServices = (services, dynamicServicesCost = 0) => {
+      for (let i = 0; i < services.length; i++) {
+        const label = services[i];
+
+        this._pdfDataServices.static.push({
+          service: label,
+          cost: this._resultData.cost - dynamicServicesCost,
+        });
+      }
+    };
+
+    const createDynamicServices = (services) => {
+      let additionalServicesCost = 0;
+
+      for (let i = 0; i < services.length; i++) {
+        const label = services[i].label;
+        const hours = services[i].hours;
+
+        let cost = hours * this._costPerHour.backend;
+        additionalServicesCost += cost;
+
+        this._pdfDataServices.dynamic.push({
+          service: label,
+          cost,
+        });
+      }
+
+      return additionalServicesCost;
+    };
+
+    switch (this._devBranch) {
+      case "landing":
+        createStaticServices(staticServices);
+        break;
+
+      default:
+        switch (this._packageBranch) {
+          case "standard":
+            createStaticServices(staticServices);
+            break;
+
+          case "expanded":
+            createStaticServices(staticServices);
+            break;
+
+          case "personal":
+            const dynamicServices = this._data.sites[
+              this._devBranch
+            ].packages.types[this._packageBranch].inputs.filter(
+              ({ checked }) => checked === true
+            );
+
+            const additionalServicesCost =
+              createDynamicServices(dynamicServices);
+            createStaticServices(staticServices, additionalServicesCost);
+            break;
+
+          default:
+            break;
+        }
+        break;
+    }
+
+    console.log(this._pdfDataServices);
+  }
+
   _createResultCost() {
     const calcLanding = () => {
       const hours =
@@ -427,64 +508,23 @@ class Quiz {
         calcLanding();
         break;
 
-      case "promo":
-        switch (this._packageBranch) {
-          case "standard":
-            calcWithoutAdditionalServices();
-            break;
-
-          case "expanded":
-            calcWithoutAdditionalServices();
-            break;
-
-          case "personal":
-            calcWithAdditionalServices();
-            break;
-
-          default:
-            break;
-        }
-        break;
-
-      case "catalog":
-        switch (this._packageBranch) {
-          case "standard":
-            calcWithoutAdditionalServices();
-            break;
-
-          case "expanded":
-            calcWithoutAdditionalServices();
-            break;
-
-          case "personal":
-            calcWithAdditionalServices();
-            break;
-
-          default:
-            break;
-        }
-        break;
-
-      case "store":
-        switch (this._packageBranch) {
-          case "standard":
-            calcWithoutAdditionalServices();
-            break;
-
-          case "expanded":
-            calcWithoutAdditionalServices();
-            break;
-
-          case "personal":
-            calcWithAdditionalServices();
-            break;
-
-          default:
-            break;
-        }
-        break;
-
       default:
+        switch (this._packageBranch) {
+          case "standard":
+            calcWithoutAdditionalServices();
+            break;
+
+          case "expanded":
+            calcWithoutAdditionalServices();
+            break;
+
+          case "personal":
+            calcWithAdditionalServices();
+            break;
+
+          default:
+            break;
+        }
         break;
     }
 
@@ -492,6 +532,8 @@ class Quiz {
   }
 
   _createPdf() {
+    this._createPdfData();
+
     this._resultContainer.insertAdjacentHTML(
       "beforeend",
       `<button id="quiz-pdf-generator" type='button'>Скачать PDF-документ</button>`
@@ -501,57 +543,152 @@ class Quiz {
       "#quiz-pdf-generator"
     );
 
-    var externalDataRetrievedFromServer = [
-      { name: "Bartek", age: 34 },
-      { name: "John", age: 27 },
-      { name: "Elizabeth", age: 30 },
-    ];
+    const getPropValueByKey = (obj, str) => {
+      str = str.replace(/\[(\w+)\]/g, ".$1"); // convert indexes to properties
+      str = str.replace(/^\./, ""); // strip a leading dot
+      const arr = str.split(".");
 
-    function buildTableBody(data, columns) {
+      for (let i = 0; i < arr.length; ++i) {
+        let key = arr[i];
+
+        if (key in obj) {
+          obj = obj[key];
+        } else {
+          return;
+        }
+      }
+      return obj;
+    };
+
+    const buildTableBody = ({ cols, showHeaders, headers }) => {
       const body = [];
+      // Inserting headers
+      if (showHeaders) {
+        body.push(headers);
+      }
 
-      body.push(columns);
-
-      data.forEach((row) => {
+      // Inserting items from personal services
+      this._pdfDataServices.static.forEach((row) => {
         const dataRow = [];
+        let i = 0;
+        let margin = [0, 0, 0, 0];
 
-        columns.forEach((column) => {
-          dataRow.push(row[column].toString());
+        cols.forEach((col) => {
+          let span = 0;
+
+          if (col === "cost") {
+            span = this._pdfDataServices.static.length;
+            margin = [0, 7 * span, 0, 0];
+
+            dataRow.push({
+              text: getPropValueByKey(row, col),
+              alignment: "center",
+              rowSpan: span,
+              margin,
+            });
+          } else {
+            dataRow.push({
+              text: getPropValueByKey(row, col),
+              alignment: headers[i].alignmentChild,
+            });
+          }
+
+          i++;
         });
+        body.push(dataRow);
+      });
 
+      // Inserting items from standard/expanded services
+      this._pdfDataServices.dynamic.forEach((row) => {
+        const dataRow = [];
+        let i = 0;
+
+        cols.forEach((col) => {
+          if (col === "cost") {
+            dataRow.push({
+              text: getPropValueByKey(row, col),
+              alignment: "center",
+            });
+          } else {
+            dataRow.push({
+              text: getPropValueByKey(row, col),
+              alignment: headers[i].alignmentChild,
+            });
+          }
+
+          i++;
+        });
         body.push(dataRow);
       });
 
       return body;
-    }
+    };
 
-    function table(data, columns) {
+    const table = ({ cols, width, showHeaders, headers, layoutDef }) => {
       return {
         table: {
           headerRows: 1,
-          body: buildTableBody(data, columns),
+          widths: width,
+          body: buildTableBody({ cols, showHeaders, headers }),
         },
+        layout: layoutDef,
       };
-    }
+    };
+
+    const basicInfo = [
+      `Тип сайта: ${this._resultData.site}\n`,
+      `CMS: ${this._resultData.cms}\n`,
+      this._resultData.design ? `Дизайн: ${this._resultData.design}` : "",
+    ];
 
     const docDefinition = {
       content: [
-        { text: "Перечень услуг", style: "header" },
-        table(externalDataRetrievedFromServer, ["name", "age"]),
+        { text: "О сайте", style: "mainTitle" },
+        { text: basicInfo[0], style: "basicInfo" },
+        { text: basicInfo[1], style: "basicInfo" },
+        { text: basicInfo[2], style: "basicInfo" },
+        { text: "Перечень услуг", style: "tableTitle" },
+        table({
+          cols: ["service", "cost"],
+          width: ["*", "*"],
+          showHeaders: true,
+          headers: [
+            {
+              text: "Услуга",
+              bold: true,
+              fontSize: 14,
+              alignmentChild: "left",
+            },
+            {
+              text: "Стоимость, BYN",
+              bold: true,
+              fontSize: 14,
+              alignmentChild: "left",
+            },
+          ],
+          layoutDef: "",
+        }),
+        { text: `Итого: ${this._resultData.cost} BYN`, style: "total" },
       ],
       styles: {
-        table: {},
-        header: {
+        mainTitle: {
+          alignment: "left",
           fontSize: 16,
           bold: true,
-          margin: [0, 0, 0, 10],
+          margin: [0, 0, 0, 15],
         },
-        tableHeader: {
+        basicInfo: {
+          margin: [0, 0, 0, 5],
+        },
+        tableTitle: {
+          fontSize: 16,
           bold: true,
-          fontSize: 14,
+          margin: [0, 10, 0, 10],
         },
         total: {
           bold: true,
+          fontSize: 14,
+          margin: [0, 10, 0, 0],
         },
       },
     };
@@ -603,13 +740,16 @@ class Quiz {
     for (const [_, value] of Object.entries(obj)) {
       this._services.insertAdjacentHTML(
         "beforeend",
-        this._createInput({
-          label: value.input ? value.input.label : value.label,
-          type: value.input ? value.input.type : value.type,
-          name: value.input ? value.input.name : value.name,
-          value: value.input ? value.input.value : value.value,
-          checked: value.input ? value.input.checked : value.checked,
-        })
+        this._createInput(
+          {
+            label: value.input ? value.input.label : value.label,
+            type: value.input ? value.input.type : value.type,
+            name: value.input ? value.input.name : value.name,
+            value: value.input ? value.input.value : value.value,
+            checked: value.input ? value.input.checked : value.checked,
+          },
+          true
+        )
       );
     }
   }
