@@ -880,6 +880,8 @@ function controlQuizCallbackInputs() {
 
   quizCallbackInputs.forEach((input) => {
     input.addEventListener("input", function () {
+      console.log(this.value);
+
       if (this.value) {
         this.classList.add("not-empty");
       } else {
@@ -909,32 +911,13 @@ function controlQuizCallbackInputs() {
       },
     ],
     dispatch: function (appended, dynamicMasked) {
-      var number = (dynamicMasked.value + appended).replace(/\D/g, "");
+      const number = (dynamicMasked.value + appended).replace(/\D/g, "");
 
       return dynamicMasked.compiledMasks.find(function (m) {
         return number.indexOf(m.startsWith) === 0;
       });
     },
   });
-
-  quizCallbackPhone.addEventListener(
-    "focus",
-    function () {
-      patternMask.updateOptions({ lazy: false });
-    },
-    true
-  );
-  quizCallbackPhone.addEventListener(
-    "blur",
-    function () {
-      patternMask.updateOptions({ lazy: true });
-
-      if (!patternMask.masked.rawInputValue) {
-        patternMask.value = "";
-      }
-    },
-    true
-  );
 }
 
 controlQuizCallbackInputs();
