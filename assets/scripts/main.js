@@ -18,6 +18,7 @@ class Quiz {
     this._resultContainer = this._quiz.querySelector("#quiz-result");
     this._descrip = this._quiz.querySelector("#quiz-descrip");
     this._services = this._quiz.querySelector("#quiz-services");
+    this._formCallback = this._quiz.querySelector("#quiz-callback");
     this._costPerHour = {
       design: +this._quiz.querySelector("#quiz-design-per-hour").value,
       frontend: +this._quiz.querySelector("#quiz-frontend-per-hour").value,
@@ -802,6 +803,7 @@ class Quiz {
 
   _createResult() {
     this._resultContainer.classList.add("active");
+    this._formCallback.classList.add("active");
 
     this._createResultSite();
     this._createResultServices();
@@ -859,11 +861,71 @@ class Quiz {
   }
 
   init() {
+    if (!this._quiz) return;
+
     this._createQuestion(data.initQuestion);
     this._initNextButton();
     this._initPrevButton();
   }
 }
+
+function controlQuizCallbackInputs() {
+  const quizCallbackInputs = document.querySelectorAll("#quiz-callback input");
+
+  if (!quizCallbackInputs.length) return;
+
+  const quizCallbackPhone = document.querySelector(
+    "#quiz-callback-phone input"
+  );
+
+  quizCallbackInputs.forEach((input) => {
+    input.addEventListener("input", function () {
+      if (this.value) {
+        this.classList.add("not-empty");
+      } else {
+        this.classList.remove("not-empty");
+      }
+    });
+  });
+
+  // const patternMask = new IMask(quizCallbackPhone, {
+  //   mask: [
+  //     {
+  //       mask: "+{7}(000)000-00-00",
+  //       startsWith: "7",
+  //       lazy: false,
+  //       country: "Russia",
+  //     },
+  //     {
+  //       mask: "+{375}(00)000-00-00",
+  //       startsWith: "375",
+  //       lazy: false,
+  //       country: "Belarus",
+  //     },
+  //   ],
+  // });
+
+  // quizCallbackPhone.addEventListener(
+  //   "focus",
+  //   function () {
+  //     patternMask.updateOptions({ lazy: false });
+  //   },
+  //   true
+  // );
+  // quizCallbackPhone.addEventListener(
+  //   "blur",
+  //   function () {
+  //     patternMask.updateOptions({ lazy: true });
+
+  //     if (!patternMask.masked.rawInputValue) {
+  //       patternMask.value = "";
+  //     }
+  //   },
+  //   true
+  // );
+}
+
+controlQuizCallbackInputs();
 
 const quiz = new Quiz("#quiz", data);
 quiz.init();
