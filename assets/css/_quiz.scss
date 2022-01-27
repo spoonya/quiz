@@ -161,6 +161,10 @@
   &.active {
     display: block;
   }
+
+  .form__control {
+    margin-bottom: 2rem;
+  }
 }
 
 .quiz__result {
