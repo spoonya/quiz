@@ -888,41 +888,53 @@ function controlQuizCallbackInputs() {
     });
   });
 
-  // const patternMask = new IMask(quizCallbackPhone, {
-  //   mask: [
-  //     {
-  //       mask: "+{7}(000)000-00-00",
-  //       startsWith: "7",
-  //       lazy: false,
-  //       country: "Russia",
-  //     },
-  //     {
-  //       mask: "+{375}(00)000-00-00",
-  //       startsWith: "375",
-  //       lazy: false,
-  //       country: "Belarus",
-  //     },
-  //   ],
-  // });
+  const patternMask = new IMask(quizCallbackPhone, {
+    mask: [
+      {
+        mask: "+000 (00) 000-00-00",
+        startsWith: "375",
+        lazy: false,
+        country: "Belarus",
+      },
+      {
+        mask: "+0 (000) 000-00-00",
+        startsWith: "7",
+        lazy: false,
+        country: "Russia",
+      },
+      {
+        mask: "0000000000000",
+        startsWith: "",
+        country: "unknown",
+      },
+    ],
+    dispatch: function (appended, dynamicMasked) {
+      var number = (dynamicMasked.value + appended).replace(/\D/g, "");
 
-  // quizCallbackPhone.addEventListener(
-  //   "focus",
-  //   function () {
-  //     patternMask.updateOptions({ lazy: false });
-  //   },
-  //   true
-  // );
-  // quizCallbackPhone.addEventListener(
-  //   "blur",
-  //   function () {
-  //     patternMask.updateOptions({ lazy: true });
+      return dynamicMasked.compiledMasks.find(function (m) {
+        return number.indexOf(m.startsWith) === 0;
+      });
+    },
+  });
 
-  //     if (!patternMask.masked.rawInputValue) {
-  //       patternMask.value = "";
-  //     }
-  //   },
-  //   true
-  // );
+  quizCallbackPhone.addEventListener(
+    "focus",
+    function () {
+      patternMask.updateOptions({ lazy: false });
+    },
+    true
+  );
+  quizCallbackPhone.addEventListener(
+    "blur",
+    function () {
+      patternMask.updateOptions({ lazy: true });
+
+      if (!patternMask.masked.rawInputValue) {
+        patternMask.value = "";
+      }
+    },
+    true
+  );
 }
 
 controlQuizCallbackInputs();
