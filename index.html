@@ -19,27 +19,27 @@
       <div class="quiz__header">
         <h3>Калькулятор стоимости</h3>
       </div>
-      <form class="quiz__content form" action="#" method="post">
+      <form class="quiz__content form" name="квиз-калькулятор" action="#" method="post">
         <input id="quiz-design-per-hour" type="hidden" name="дизайн-стоимость" value="12" />
         <input id="quiz-frontend-per-hour" type="hidden" name="вёрстка-стоимость" value="12" />
         <input id="quiz-backend-per-hour" type="hidden" name="бэкенд-стоимость" value="16" />
         <h4 id="quiz-question" class="quiz__question"></h4>
         <div id="quiz-answers" class="quiz__answers"></div>
         <div id="quiz-result" class="quiz__result"></div>
-        <div id="quiz-callback" class="quiz__form">
-          <h4>Обратная связь</h4>
-          <label id="quiz-callback-phone" class="form__control">
-            <input class="form__input" name="калькулятор-телефон" type="tel" />
-            <span class="form__label-txt">Телефон</span>
-          </label>
-          <label id="quiz-callback-email" class="form__control">
-            <input class="form__input" name="калькулятор-почта" type="email" />
-            <span class="form__label-txt">E-mail</span>
-          </label>
-          <button type="submit">Отправить</button>
-        </div>
         <ul id="quiz-descrip" class="quiz__descrip"></ul>
         <div id="quiz-services" class="quiz__services"></div>
+      </form>
+      <form id="quiz-callback" class="quiz__form" name="квиз-контакты" action="#" method="post">
+        <h4>Обратная связь</h4>
+        <label id="quiz-callback-phone" class="form__control">
+          <input class="form__input" name="калькулятор-телефон" type="tel" />
+          <span class="form__label-txt">Телефон</span>
+        </label>
+        <label id="quiz-callback-email" class="form__control">
+          <input class="form__input" name="калькулятор-почта" type="email" />
+          <span class="form__label-txt">E-mail</span>
+        </label>
+        <button type="submit">Отправить</button>
       </form>
       <div id="quiz-controls" class="quiz__controls">
         <button type="button" id="quiz-controls-next" class="quiz__controls-button quiz__controls-button--next">

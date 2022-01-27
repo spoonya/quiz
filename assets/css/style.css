@@ -770,37 +770,6 @@ body {
   min-height: 20px;
 }
 
-.quiz__content .form__label-txt {
-  position: absolute;
-  color: #666666;
-  font-size: 18px;
-  margin-bottom: 0;
-  cursor: text;
-  -webkit-transform: translateY(-30px);
-          transform: translateY(-30px);
-  -webkit-transition: font-size 0.2s linear, -webkit-transform 0.2s linear;
-  transition: font-size 0.2s linear, -webkit-transform 0.2s linear;
-  transition: transform 0.2s linear, font-size 0.2s linear;
-  transition: transform 0.2s linear, font-size 0.2s linear, -webkit-transform 0.2s linear;
-}
-
-.quiz__content .form__input {
-  border-bottom: 1px #333333 solid;
-  color: #333333;
-}
-
-.quiz__content .form__input.not-empty + .form__label-txt {
-  -webkit-transform: translateY(-42px);
-          transform: translateY(-42px);
-  font-size: 14px;
-}
-
-.quiz__content .form__input:focus:not(.not-empty) + .form__label-txt {
-  -webkit-transform: translateY(-42px);
-          transform: translateY(-42px);
-  font-size: 14px;
-}
-
 .quiz__form {
   display: none;
   max-width: 32rem;
@@ -825,7 +794,7 @@ body {
 .quiz__form h4 {
   font-weight: 700;
   text-align: center;
-  font-size: 2.3rem;
+  font-size: 2rem;
   margin-bottom: 25px;
 }
 
@@ -835,6 +804,37 @@ body {
 
 .quiz__form .form__control {
   margin-bottom: 45px;
+}
+
+.quiz__form .form__label-txt {
+  position: absolute;
+  color: #666666;
+  font-size: 18px;
+  margin-bottom: 0;
+  cursor: text;
+  -webkit-transform: translateY(-30px);
+          transform: translateY(-30px);
+  -webkit-transition: font-size 0.2s linear, -webkit-transform 0.2s linear;
+  transition: font-size 0.2s linear, -webkit-transform 0.2s linear;
+  transition: transform 0.2s linear, font-size 0.2s linear;
+  transition: transform 0.2s linear, font-size 0.2s linear, -webkit-transform 0.2s linear;
+}
+
+.quiz__form .form__input {
+  border-bottom: 1px #333333 solid;
+  color: #333333;
+}
+
+.quiz__form .form__input.not-empty + .form__label-txt {
+  -webkit-transform: translateY(-42px);
+          transform: translateY(-42px);
+  font-size: 14px;
+}
+
+.quiz__form .form__input:focus:not(.not-empty) + .form__label-txt {
+  -webkit-transform: translateY(-42px);
+          transform: translateY(-42px);
+  font-size: 14px;
 }
 
 .quiz__header {
