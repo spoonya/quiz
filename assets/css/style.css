@@ -743,14 +743,23 @@ body {
   max-height: calc(90vh);
   height: 100%;
   overflow-y: auto;
-  padding: 3rem;
+  padding: 30px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
           box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
   border-radius: 5px;
 }
 
+@media only screen and (max-width: 48em) {
+  .quiz {
+    max-width: 95vw;
+    width: 100%;
+    padding: 30px 20px;
+  }
+}
+
 .quiz__content .form__checkbox-txt {
   color: #333333;
+  white-space: unset;
 }
 
 .quiz__content .form__checkbox-styled {
@@ -845,6 +854,12 @@ body {
   text-align: center;
   font-size: 2.5rem;
   font-weight: 700;
+}
+
+@media only screen and (max-width: 48em) {
+  .quiz__header h3 {
+    font-size: 22px;
+  }
 }
 
 .quiz__question {
