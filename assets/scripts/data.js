@@ -1,53 +1,20 @@
 export const data = {
-  initQuestionLabel: "Тип сайта",
+  initQuestionLabel: "Тип сайта:",
   initQuestion: "sites",
-  packages: {
-    question: "Тип пакета услуг",
-    nextQuestion: "engines",
-    types: {
-      standard: {
-        input: {
-          label: "Стандартный",
-          name: "пакет услуг",
-          type: "radio",
-          value: "стандартный",
-          checked: false,
-        },
-      },
-      expanded: {
-        input: {
-          label: "Расширенный",
-          name: "пакет услуг",
-          type: "radio",
-          value: "расширенный",
-          checked: false,
-        },
-      },
-      personal: {
-        input: {
-          label: "Индивидуальный",
-          name: "пакет услуг",
-          type: "radio",
-          value: "индивидуальный",
-          checked: false,
-        },
-      },
-    },
-  },
   sites: {
     landing: {
       input: {
         label: "Лендинг",
-        name: "тип сайта",
+        name: "type_site",
         type: "radio",
         value: "лендинг",
         checked: false,
       },
       packages: {
-        question: "Функционал",
-        nextQuestion: "engines",
+        question: "Индивидуальный пакет:",
         types: {
           standard: {
+            nextQuestion: "engines",
             hours: {
               frontend: 0,
               design: 0,
@@ -62,6 +29,7 @@ export const data = {
             ],
           },
           expanded: {
+            nextQuestion: "engines",
             hours: {
               frontend: 8,
               design: 8,
@@ -79,6 +47,7 @@ export const data = {
             ],
           },
           personal: {
+            nextQuestion: "engines",
             hours: {
               frontend: 8,
               design: 8,
@@ -99,12 +68,12 @@ export const data = {
         },
       },
       engines: {
-        question: "CMS",
+        question: "Выберите CMS:",
         nextQuestion: "",
         types: [
           {
             label: "Framework",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Framework",
             checked: false,
@@ -112,7 +81,7 @@ export const data = {
           },
           {
             label: "Modx Revolution",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Modx Revolution",
             checked: false,
@@ -120,7 +89,7 @@ export const data = {
           },
           {
             label: "Evolution CMS",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Evolution CMS",
             checked: false,
@@ -128,7 +97,7 @@ export const data = {
           },
           {
             label: "Wordpress",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Wordpress",
             checked: false,
@@ -136,7 +105,7 @@ export const data = {
           },
           {
             label: "Tilda",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Tilda",
             checked: false,
@@ -144,7 +113,7 @@ export const data = {
           },
           {
             label: "October CMS",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "October CMS",
             checked: false,
@@ -156,16 +125,17 @@ export const data = {
     promo: {
       input: {
         label: "Сайт-визитка",
-        name: "тип сайта",
+        name: "type_site",
         type: "radio",
         value: "визитка",
         checked: false,
       },
       packages: {
-        question: "Функционал",
+        question: "Индивидуальный пакет:",
         nextQuestion: "engines",
         types: {
           standard: {
+            nextQuestion: "engines",
             descrip: [
               "главная",
               "контакты",
@@ -177,6 +147,7 @@ export const data = {
             ],
           },
           expanded: {
+            nextQuestion: "engines",
             descrip: [
               "главная",
               "контакты",
@@ -189,6 +160,7 @@ export const data = {
             ],
           },
           personal: {
+            nextQuestion: "services",
             descrip: [
               "главная",
               "контакты",
@@ -202,7 +174,7 @@ export const data = {
             inputs: [
               {
                 label: "интеграция с CRM",
-                name: "интеграция с CRM",
+                name: "intg_CRM",
                 type: "checkbox",
                 value: "интеграция с CRM",
                 checked: false,
@@ -210,7 +182,7 @@ export const data = {
               },
               {
                 label: "настройки чат-бота",
-                name: "настройки чат-бота",
+                name: "chat_bot",
                 type: "checkbox",
                 value: "настройки чат-бота",
                 checked: false,
@@ -218,7 +190,7 @@ export const data = {
               },
               {
                 label: "мультиязычность",
-                name: "мультиязычность",
+                name: "babel",
                 type: "checkbox",
                 value: "мультиязычность",
                 checked: false,
@@ -226,7 +198,7 @@ export const data = {
               },
               {
                 label: "перевод контента",
-                name: "перевод контента",
+                name: "translit",
                 type: "checkbox",
                 value: "перевод контента",
                 checked: false,
@@ -234,7 +206,7 @@ export const data = {
               },
               {
                 label: "индивидуальные консультации и обучение по наполнению",
-                name: "индивидуальные консультации и обучение по наполнению",
+                name: "consult",
                 type: "checkbox",
                 value: "индивидуальные консультации и обучение по наполнению",
                 checked: false,
@@ -242,7 +214,7 @@ export const data = {
               },
               {
                 label: "наполнение",
-                name: "наполнение",
+                name: "filling",
                 type: "checkbox",
                 value: "наполнение",
                 checked: false,
@@ -250,7 +222,7 @@ export const data = {
               },
               {
                 label: "создание индивидуальных решений",
-                name: "создание индивидуальных решений",
+                name: "create_solutions",
                 type: "checkbox",
                 value: "создание индивидуальных решений",
                 checked: false,
@@ -261,12 +233,12 @@ export const data = {
         },
       },
       engines: {
-        question: "CMS",
+        question: "Выберите CMS:",
         nextQuestion: "design",
         types: [
           {
             label: "Framework",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "framework",
             checked: false,
@@ -278,7 +250,7 @@ export const data = {
           },
           {
             label: "Modx Revolution",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Modx Revolution",
             checked: false,
@@ -290,7 +262,7 @@ export const data = {
           },
           {
             label: "Evolution CMS",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Evolution CMS",
             checked: false,
@@ -302,7 +274,7 @@ export const data = {
           },
           {
             label: "1C Bitrix",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "1C Bitrix",
             checked: false,
@@ -314,7 +286,7 @@ export const data = {
           },
           {
             label: "Wordpress",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Wordpress",
             checked: false,
@@ -326,7 +298,7 @@ export const data = {
           },
           {
             label: "Tilda",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Tilda",
             checked: false,
@@ -338,7 +310,7 @@ export const data = {
           },
           {
             label: "October CMS",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "October CMS",
             checked: false,
@@ -354,16 +326,16 @@ export const data = {
     catalog: {
       input: {
         label: "Каталог",
-        name: "тип сайта",
+        name: "type_site",
         type: "radio",
         value: "каталог",
         checked: false,
       },
       packages: {
-        question: "Функционал",
-        nextQuestion: "engines",
+        question: "Индивидуальный пакет:",
         types: {
           standard: {
+            nextQuestion: "engines",
             descrip: [
               "главная",
               "контакты",
@@ -379,6 +351,7 @@ export const data = {
             ],
           },
           expanded: {
+            nextQuestion: "engines",
             descrip: [
               "главная",
               "контакты",
@@ -395,6 +368,7 @@ export const data = {
             ],
           },
           personal: {
+            nextQuestion: "services",
             descrip: [
               "главная",
               "контакты",
@@ -408,7 +382,7 @@ export const data = {
             inputs: [
               {
                 label: "интеграция с CRM",
-                name: "интеграция с CRM",
+                name: "chat_bot",
                 type: "checkbox",
                 value: "интеграция с CRM",
                 checked: false,
@@ -416,7 +390,7 @@ export const data = {
               },
               {
                 label: "настройки чат-бота",
-                name: "настройки чат-бота",
+                name: "chat_bot",
                 type: "checkbox",
                 value: "настройки чат-бота",
                 checked: false,
@@ -424,7 +398,7 @@ export const data = {
               },
               {
                 label: "мультиязычность",
-                name: "мультиязычность",
+                name: "babel",
                 type: "checkbox",
                 value: "мультиязычность",
                 checked: false,
@@ -432,7 +406,7 @@ export const data = {
               },
               {
                 label: "перевод контента",
-                name: "перевод контента",
+                name: "translit",
                 type: "checkbox",
                 value: "перевод контента",
                 checked: false,
@@ -440,7 +414,7 @@ export const data = {
               },
               {
                 label: "индивидуальные консультации и обучение по наполнению",
-                name: "индивидуальные консультации и обучение по наполнению",
+                name: "consult",
                 type: "checkbox",
                 value: "индивидуальные консультации и обучение по наполнению",
                 checked: false,
@@ -448,7 +422,7 @@ export const data = {
               },
               {
                 label: "наполнение",
-                name: "наполнение",
+                name: "filling",
                 type: "checkbox",
                 value: "наполнение",
                 checked: false,
@@ -456,7 +430,7 @@ export const data = {
               },
               {
                 label: "создание индивидуальных решений",
-                name: "создание индивидуальных решений",
+                name: "create_solutions",
                 type: "checkbox",
                 value: "создание индивидуальных решений",
                 checked: false,
@@ -464,7 +438,7 @@ export const data = {
               },
               {
                 label: "парсинг товаров",
-                name: "парсинг товаров",
+                name: "parsing",
                 type: "checkbox",
                 value: "парсинг товаров",
                 checked: false,
@@ -472,7 +446,7 @@ export const data = {
               },
               {
                 label: "ручное заполнение",
-                name: "ручное заполнение",
+                name: "manual",
                 type: "checkbox",
                 value: "ручное заполнение",
                 checked: false,
@@ -480,7 +454,7 @@ export const data = {
               },
               {
                 label: "создание модификаций товаров",
-                name: "создание модификаций товаров",
+                name: "modification",
                 type: "checkbox",
                 value: "создание модификаций товаров",
                 checked: false,
@@ -488,7 +462,7 @@ export const data = {
               },
               {
                 label: "страница сравнения",
-                name: "страница сравнения",
+                name: "compromis",
                 type: "checkbox",
                 value: "страница сравнения",
                 checked: false,
@@ -497,7 +471,7 @@ export const data = {
               {
                 label:
                   "вёрстка письма для заказчика с использованием фирменного стиля",
-                name: "вёрстка письма для заказчика с использованием фирменного стиля",
+                name: "individual",
                 type: "checkbox",
                 value:
                   "вёрстка письма для заказчика с использованием фирменного стиля",
@@ -509,12 +483,12 @@ export const data = {
         },
       },
       engines: {
-        question: "CMS",
+        question: "Выберите CMS:",
         nextQuestion: "design",
         types: [
           {
             label: "Framework",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "framework",
             checked: false,
@@ -526,7 +500,7 @@ export const data = {
           },
           {
             label: "Modx Revolution",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Modx Revolution",
             checked: false,
@@ -538,7 +512,7 @@ export const data = {
           },
           {
             label: "Evolution CMS",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Evolution CMS",
             checked: false,
@@ -550,7 +524,7 @@ export const data = {
           },
           {
             label: "1C Bitrix",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "1C Bitrix",
             checked: false,
@@ -562,7 +536,7 @@ export const data = {
           },
           {
             label: "Wordpress",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Wordpress",
             checked: false,
@@ -574,7 +548,7 @@ export const data = {
           },
           {
             label: "Tilda",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Tilda",
             checked: false,
@@ -590,16 +564,16 @@ export const data = {
     store: {
       input: {
         label: "Интернет-магазин",
-        name: "тип сайта",
+        name: "type_site",
         type: "radio",
         value: "магазин",
         checked: false,
       },
       packages: {
-        question: "Функционал",
-        nextQuestion: "engines",
+        question: "Индивидуальный пакет:",
         types: {
           standard: {
+            nextQuestion: "engines",
             descrip: [
               "главная",
               "контакты",
@@ -615,6 +589,7 @@ export const data = {
             ],
           },
           expanded: {
+            nextQuestion: "engines",
             descrip: [
               "главная",
               "контакты",
@@ -631,6 +606,7 @@ export const data = {
             ],
           },
           personal: {
+            nextQuestion: "services",
             descrip: [
               "главная",
               "контакты",
@@ -676,7 +652,7 @@ export const data = {
               },
               {
                 label: "интеграция с CRM",
-                name: "интеграция с CRM",
+                name: "intg_CRM",
                 type: "checkbox",
                 value: "интеграция с CRM",
                 checked: false,
@@ -684,7 +660,7 @@ export const data = {
               },
               {
                 label: "настройки чат-бота",
-                name: "настройки чат-бота",
+                name: "chat_bot",
                 type: "checkbox",
                 value: "настройки чат-бота",
                 checked: false,
@@ -692,7 +668,7 @@ export const data = {
               },
               {
                 label: "мультиязычность",
-                name: "мультиязычность",
+                name: "babel",
                 type: "checkbox",
                 value: "мультиязычность",
                 checked: false,
@@ -700,7 +676,7 @@ export const data = {
               },
               {
                 label: "перевод контента",
-                name: "перевод контента",
+                name: "translit",
                 type: "checkbox",
                 value: "перевод контента",
                 checked: false,
@@ -708,7 +684,7 @@ export const data = {
               },
               {
                 label: "индивидуальные консультации и обучение по наполнению",
-                name: "индивидуальные консультации и обучение по наполнению",
+                name: "consult",
                 type: "checkbox",
                 value: "индивидуальные консультации и обучение по наполнению",
                 checked: false,
@@ -716,7 +692,7 @@ export const data = {
               },
               {
                 label: "наполнение",
-                name: "наполнение",
+                name: "filling",
                 type: "checkbox",
                 value: "наполнение",
                 checked: false,
@@ -724,7 +700,7 @@ export const data = {
               },
               {
                 label: "создание индивидуальных решений",
-                name: "создание индивидуальных решений",
+                name: "create_solutions",
                 type: "checkbox",
                 value: "создание индивидуальных решений",
                 checked: false,
@@ -732,7 +708,7 @@ export const data = {
               },
               {
                 label: "парсинг товаров",
-                name: "парсинг товаров",
+                name: "parsing",
                 type: "checkbox",
                 value: "парсинг товаров",
                 checked: false,
@@ -740,7 +716,7 @@ export const data = {
               },
               {
                 label: "ручное заполнение",
-                name: "ручное заполнение",
+                name: "manual",
                 type: "checkbox",
                 value: "ручное заполнение",
                 checked: false,
@@ -748,7 +724,7 @@ export const data = {
               },
               {
                 label: "создание модификаций товаров",
-                name: "создание модификаций товаров",
+                name: "modification",
                 type: "checkbox",
                 value: "создание модификаций товаров",
                 checked: false,
@@ -756,7 +732,7 @@ export const data = {
               },
               {
                 label: "страница сравнения",
-                name: "страница сравнения",
+                name: "compromis",
                 type: "checkbox",
                 value: "страница сравнения",
                 checked: false,
@@ -765,7 +741,7 @@ export const data = {
               {
                 label:
                   "вёрстка письма для заказчика с использованием фирменного стиля",
-                name: "вёрстка письма для заказчика с использованием фирменного стиля",
+                name: "individual",
                 type: "checkbox",
                 value:
                   "вёрстка письма для заказчика с использованием фирменного стиля",
@@ -777,12 +753,12 @@ export const data = {
         },
       },
       engines: {
-        question: "CMS",
+        question: "Выберите CMS:",
         nextQuestion: "design",
         types: [
           {
             label: "Modx Revolution",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Modx Revolution",
             checked: false,
@@ -794,7 +770,7 @@ export const data = {
           },
           {
             label: "Evolution CMS",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Evolution CMS",
             checked: false,
@@ -806,7 +782,7 @@ export const data = {
           },
           {
             label: "1C Bitrix",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "1C Bitrix",
             checked: false,
@@ -818,7 +794,7 @@ export const data = {
           },
           {
             label: "Wordpress",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Wordpress",
             checked: false,
@@ -830,7 +806,7 @@ export const data = {
           },
           {
             label: "Tilda",
-            name: "движок",
+            name: "cms",
             type: "radio",
             value: "Tilda",
             checked: false,
@@ -843,16 +819,66 @@ export const data = {
         ],
       },
     },
+    unknown: {
+      input: {
+        label: "не знаю",
+        name: "type_site",
+        type: "radio",
+        value: "не знаю",
+        checked: false,
+      },
+    },
+  },
+  packages: {
+    question: "Тип пакета услуг:",
+    types: {
+      standard: {
+        input: {
+          label: "Стандартный",
+          name: "package_serv",
+          type: "radio",
+          value: "стандартный",
+          checked: false,
+        },
+      },
+      expanded: {
+        input: {
+          label: "Расширенный",
+          name: "package_serv",
+          type: "radio",
+          value: "расширенный",
+          checked: false,
+        },
+      },
+      personal: {
+        input: {
+          label: "Индивидуальный",
+          name: "package_serv",
+          type: "radio",
+          value: "индивидуальный",
+          checked: false,
+        },
+      },
+      unknown: {
+        input: {
+          label: "не знаю",
+          name: "package_serv",
+          type: "radio",
+          value: "не знаю",
+          checked: false,
+        },
+      },
+    },
   },
   design: {
-    question: "Дизайн",
+    question: "Тип дизайна:",
     nextQuestion: "",
     types: [
       {
-        label: "Индивидуальный дизайн",
-        name: "дизайн",
+        label: "Индивидуальный",
+        name: "disign",
         type: "radio",
-        value: "индивидуальынй дизайн",
+        value: "индивидуальынй",
         checked: false,
         hours: {
           promo: {
@@ -871,7 +897,7 @@ export const data = {
       },
       {
         label: "Шаблон",
-        name: "дизайн",
+        name: "disign",
         type: "radio",
         value: "шаблон",
         checked: false,

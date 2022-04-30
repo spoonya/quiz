@@ -3,6 +3,7 @@ import { data } from "./data.js";
 const questions = {
   sites: "sites",
   packages: "packages",
+  services: "services",
   engines: "engines",
   design: "design",
 };
@@ -10,15 +11,21 @@ const questions = {
 class Quiz {
   constructor(selector, data) {
     this._quiz = document.querySelector(selector);
+    this._costInner = document.querySelector(".cost__inner");
+    this._quizContent = document.querySelector("#quiz-content");
+    this._quizContentWrapper = this._quizContent.closest(".quiz__wrapper");
     this._question = this._quiz.querySelector("#quiz-question");
+    this._title = this._quiz.querySelector("#quiz-title");
+    this._formCallbackDescrip = this._quiz.querySelector("#quiz-form-descrip");
     this._answers = this._quiz.querySelector("#quiz-answers");
     this._controls = this._quiz.querySelector("#quiz-controls");
     this._nextBtn = this._controls.querySelector("#quiz-controls-next");
     this._prevBtn = this._controls.querySelector("#quiz-controls-prev");
     this._resultContainer = this._quiz.querySelector("#quiz-result");
     this._descrip = this._quiz.querySelector("#quiz-descrip");
-    this._services = this._quiz.querySelector("#quiz-services");
     this._formCallback = this._quiz.querySelector("#quiz-callback");
+    this._formCallbackWrapper = this._formCallback.closest(".quiz__wrapper");
+    this._disclaimer = this._quiz.querySelector("#quiz-disclaimer");
     this._costPerHour = {
       design: +this._quiz.querySelector("#quiz-design-per-hour").value,
       frontend: +this._quiz.querySelector("#quiz-frontend-per-hour").value,
@@ -41,6 +48,7 @@ class Quiz {
     this._packageBranch = "";
     this._nextQuestion = "";
     this._prevQuestion = "";
+    this._answerUnknown = false;
   }
 
   _controlPackagesInputs(radio) {
@@ -54,38 +62,14 @@ class Quiz {
       }
     }
 
-    this._createDescrip(
-      this._data.sites[this._devBranch].packages.types[this._packageBranch]
-        .descrip
-    );
-
-    if (this._packageBranch === "personal" && this._devBranch !== "landing") {
-      this._createServices(
+    if (radio.dataset.quizPackageBranch !== "unknown") {
+      this._createDescrip(
+        radio,
         this._data.sites[this._devBranch].packages.types[this._packageBranch]
-          .inputs
+          .descrip
       );
 
-      this._services
-        .querySelectorAll("input[type='checkbox']")
-        .forEach((checkbox) => {
-          checkbox.addEventListener("change", () => {
-            const packageName = checkbox.value;
-
-            for (const [_, value] of Object.entries(
-              this._data.sites[this._devBranch].packages.types[
-                this._packageBranch
-              ].inputs
-            )) {
-              if (value.value === packageName) {
-                if (checkbox.checked) {
-                  value.checked = true;
-                } else {
-                  value.checked = false;
-                }
-              }
-            }
-          });
-        });
+      this._descrip.classList.add("active");
     }
   }
 
@@ -98,6 +82,16 @@ class Quiz {
       if (checkedInput.dataset.quizPackageBranch) {
         this._packageBranch = checkedInput.dataset.quizPackageBranch;
       }
+    }
+
+    if (
+      question === questions.packages &&
+      this._devBranch !== "landing" &&
+      this._packageBranch === "personal"
+    ) {
+      this._disclaimer.classList.add("active");
+    } else {
+      this._disclaimer.classList.remove("active");
     }
 
     this._clearAnswers();
@@ -117,6 +111,13 @@ class Quiz {
 
             this._data.sites[site].input.checked = true;
 
+            if (site === "unknown") {
+              radio.dataset.quizNextQuestion = "";
+              this._answerUnknown = true;
+            } else {
+              this._answerUnknown = false;
+            }
+
             for (const [key, value] of Object.entries(this._data.sites)) {
               if (site !== key) {
                 value.input.checked = false;
@@ -133,8 +134,9 @@ class Quiz {
         this._prevQuestion = questions.sites;
 
         this._createAnswers(this._data.packages.types, {
-          nextQuestion: this._data.sites[this._devBranch].packages.nextQuestion,
+          nextQuestion: "",
           packageBranch: true,
+          isPackageQuestion: true,
         });
 
         this._answers
@@ -146,8 +148,67 @@ class Quiz {
 
             radio.addEventListener("change", () => {
               this._controlPackagesInputs(radio);
+
+              const packageBranch = radio.dataset.quizPackageBranch;
+
+              if (packageBranch === "unknown") {
+                radio.dataset.quizNextQuestion = "";
+                this._answerUnknown = true;
+                this._descrip.classList.remove("active");
+              } else {
+                this._answerUnknown = false;
+              }
+
+              if (
+                this._question.innerText === this._data.packages.question &&
+                this._devBranch !== "landing"
+              ) {
+                if (radio.value === "индивидуальный") {
+                  this._disclaimer.classList.add("active");
+                } else {
+                  this._disclaimer.classList.remove("active");
+                }
+              } else {
+                this._disclaimer.classList.remove();
+              }
             });
           });
+
+        break;
+
+      case questions.services:
+        this._question.innerText =
+          this._data.sites[this._devBranch].packages.question;
+
+        this._prevQuestion = questions.packages;
+
+        this._createAnswers(
+          this._data.sites[this._devBranch].packages.types[this._packageBranch]
+            .inputs,
+          {
+            nextQuestion: "engines",
+          }
+        );
+
+        this._answers.querySelectorAll("input").forEach((checkbox) => {
+          checkbox.addEventListener("change", () => {
+            const packageName = checkbox.value;
+
+            for (const [_, value] of Object.entries(
+              this._data.sites[this._devBranch].packages.types[
+                this._packageBranch
+              ].inputs
+            )) {
+              if (value.value === packageName) {
+                if (checkbox.checked) {
+                  value.checked = true;
+                } else {
+                  value.checked = false;
+                }
+              }
+            }
+          });
+        });
 
         break;
 
@@ -205,7 +266,6 @@ class Quiz {
         break;
 
       default:
-        this._question.innerText = "Результат";
         this._hideControls();
         this._createResult();
         break;
@@ -258,13 +318,16 @@ class Quiz {
     return inputTemplate;
   }
 
-  _createDescrip(obj) {
+  _createDescrip(radio, obj) {
     this._clearDescrip();
-    this._clearServices();
+
+    const radioWrapper = radio.closest(".form__control");
 
     for (const [_, value] of Object.entries(obj)) {
       this._descrip.insertAdjacentHTML("beforeend", `<li>${value}</li>`);
     }
+
+    radioWrapper.after(this._descrip);
   }
 
   _initPrevButton() {
@@ -282,10 +345,8 @@ class Quiz {
 
       if (this._prevQuestion === questions.packages) {
         this._descrip.classList.add("active");
-        this._services.classList.add("active");
       } else {
         this._descrip.classList.remove("active");
-        this._services.classList.remove("active");
       }
 
       this._createQuestion(this._prevQuestion, input);
@@ -300,19 +361,23 @@ class Quiz {
 
       this._nextQuestion = checkedInput.dataset.quizNextQuestion;
 
-      this._questionNumber += 1;
-      this._displayPrevButton();
-
       if (this._nextQuestion === questions.packages) {
         this._descrip.classList.add("active");
-        this._services.classList.add("active");
       } else {
         this._descrip.classList.remove("active");
-        this._services.classList.remove("active");
       }
 
       this._createQuestion(this._nextQuestion, checkedInput);
+
+      this._nextQuestion = checkedInput.dataset.quizNextQuestion;
+
+      this._questionNumber += 1;
+      this._displayPrevButton();
     });
+  }
+
+  _capitalizeFirstLetter(string) {
+    return string[0].toUpperCase() + string.slice(1);
   }
 
   _appendResult(label, result) {
@@ -324,21 +389,21 @@ class Quiz {
 
   _createResultSite() {
     const site = this._data.sites[this._devBranch].input;
-    this._resultData.site = site.label.toLowerCase();
+    this._resultData.site = site.label;
 
-    this._appendResult("Тип сайта", site.label.toLowerCase());
+    this._appendResult("Тип сайта", site.label);
   }
 
   _createResultServices() {
     const staticServices = this._data.sites[this._devBranch].packages.types[
       this._packageBranch
-    ].descrip.map((service) => " " + service.toLowerCase());
+    ].descrip.map((service) => " " + this._capitalizeFirstLetter(service));
 
     const dynamicServices = this._data.sites[this._devBranch].packages.types[
       this._packageBranch
     ].inputs
       ?.filter(({ checked }) => checked === true)
-      .map((service) => " " + service.label.toLowerCase());
+      .map((service) => " " + this._capitalizeFirstLetter(service.label));
 
     this._resultData.services = dynamicServices
       ? staticServices.concat(dynamicServices)
@@ -369,10 +434,10 @@ class Quiz {
         ? (this._resultData.design = "индивидуальный дизайн")
         : (this._resultData.design = "шаблон");
     } else {
-      this._resultData.design = design.label.toLowerCase();
+      this._resultData.design = design.label;
     }
 
-    this._appendResult("Дизайн", this._resultData.design.toLowerCase());
+    this._appendResult("Дизайн", this._resultData.design);
   }
 
   _createPdfData() {
@@ -425,7 +490,7 @@ class Quiz {
             break;
 
           default:
-            switch (this._resultData.design) {
+            switch (this._resultData.design.toLowerCase()) {
               case "шаблон":
                 this._pdfDataServices.static.push({
                   service: label,
@@ -533,9 +598,13 @@ class Quiz {
         ({ checked }) => checked === true
       ).hours[this._packageBranch];
 
-      if (this._resultData.design === "шаблон") {
+      console.log(this._resultData.design);
+
+      if (this._resultData.design.toLowerCase() === "шаблон") {
         this._resultData.cost = cmsHours * this._costPerHour.backend;
       } else {
+        console.log(this._data.design.types);
+
         const designHours = this._data.design.types.find(
           ({ checked }) => checked === true
         ).hours[this._devBranch];
@@ -560,7 +629,7 @@ class Quiz {
 
       const backendHours = cmsHours + servicesHours;
 
-      if (this._resultData.design === "шаблон") {
+      if (this._resultData.design.toLowerCase() === "шаблон") {
         this._resultData.cost = backendHours * this._costPerHour.backend;
       } else {
         const designHours = this._data.design.types.find(
@@ -785,10 +854,6 @@ class Quiz {
     this._descrip.innerHTML = "";
   }
 
-  _clearServices() {
-    this._services.innerHTML = "";
-  }
-
   _displayPrevButton() {
     if (this._questionNumber) {
       this._prevBtn.classList.add("active");
@@ -802,34 +867,23 @@ class Quiz {
   }
 
   _createResult() {
-    this._resultContainer.classList.add("active");
     this._formCallback.classList.add("active");
+    this._question.style.display = "none";
+    this._title.innerText = "Результат";
 
-    this._createResultSite();
-    this._createResultServices();
-    this._createResultEngine();
-    this._createResultDesign();
-    this._createResultCost();
-    this._createPdf();
-  }
+    if (this._answerUnknown) {
+      this._quizContentWrapper.classList.add("hidden");
+      this._formCallbackDescrip.classList.add("active");
+    } else {
+      this._resultContainer.classList.add("active");
+      this._formCallbackWrapper.classList.add("active");
 
-  _createServices(obj) {
-    this._clearServices();
-
-    for (const [_, value] of Object.entries(obj)) {
-      this._services.insertAdjacentHTML(
-        "beforeend",
-        this._createInput(
-          {
-            label: value.input ? value.input.label : value.label,
-            type: value.input ? value.input.type : value.type,
-            name: value.input ? value.input.name : value.name,
-            value: value.input ? value.input.value : value.value,
-            checked: value.input ? value.input.checked : value.checked,
-          },
-          true
-        )
-      );
+      this._createResultSite();
+      this._createResultServices();
+      this._createResultEngine();
+      this._createResultDesign();
+      this._createResultCost();
+      this._createPdf();
     }
   }
 
@@ -840,6 +894,7 @@ class Quiz {
       prevQuestion = this._prevQuestion,
       devBranch = false,
       packageBranch = false,
+      isPackageQuestion = false,
     }
   ) {
     for (const [key, value] of Object.entries(obj)) {
@@ -853,7 +908,12 @@ class Quiz {
           checked: value.input ? value.input.checked : value.checked,
           devBranch: devBranch ? key : this._devBranch,
           packageBranch: packageBranch ? key : this._packageBranch,
-          nextQuestion: nextQuestion,
+          nextQuestion:
+            isPackageQuestion &&
+            this._data.sites[this._devBranch].packages.types[key]
+              ? this._data.sites[this._devBranch].packages.types[key]
+                  .nextQuestion
+              : nextQuestion,
           prevQuestion: prevQuestion,
         })
       );
@@ -869,58 +929,7 @@ class Quiz {
   }
 }
 
-function controlQuizCallbackInputs() {
-  const quizCallbackInputs = document.querySelectorAll("#quiz-callback input");
-
-  if (!quizCallbackInputs.length) return;
-
-  const quizCallbackPhone = document.querySelector(
-    "#quiz-callback-phone input"
-  );
-
-  quizCallbackInputs.forEach((input) => {
-    input.addEventListener("input", function () {
-      console.log(this.value);
-
-      if (this.value) {
-        this.classList.add("not-empty");
-      } else {
-        this.classList.remove("not-empty");
-      }
-    });
-  });
-
-  const patternMask = new IMask(quizCallbackPhone, {
-    mask: [
-      {
-        mask: "+000 (00) 000-00-00",
-        startsWith: "375",
-        lazy: false,
-        country: "Belarus",
-      },
-      {
-        mask: "+0 (000) 000-00-00",
-        startsWith: "7",
-        lazy: false,
-        country: "Russia",
-      },
-      {
-        mask: "0000000000000",
-        startsWith: "",
-        country: "unknown",
-      },
-    ],
-    dispatch: function (appended, dynamicMasked) {
-      const number = (dynamicMasked.value + appended).replace(/\D/g, "");
-
-      return dynamicMasked.compiledMasks.find(function (m) {
-        return number.indexOf(m.startsWith) === 0;
-      });
-    },
-  });
+if (document.querySelector("#quiz")) {
+  const quiz = new Quiz("#quiz", data);
+  quiz.init();
 }
-
-controlQuizCallbackInputs();
-
-const quiz = new Quiz("#quiz", data);
-quiz.init();

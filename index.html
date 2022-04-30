@@ -15,41 +15,80 @@
 
 <body>
   <main>
-    <div id="quiz" class="quiz">
-      <div class="quiz__header">
-        <h3>Калькулятор стоимости</h3>
+    <form id="quiz" class="quiz quiz__content form" name="квиз-калькулятор" action="#" method="post">
+      <div class="quiz__wrapper">
+        <div class="quiz__header">
+          <p id="quiz-title">Калькулятор стоимости</p>
+        </div>
+        <div id="quiz-content">
+          <input id="quiz-design-per-hour" type="hidden" name="дизайн-стоимость" value="12" />
+          <input id="quiz-frontend-per-hour" type="hidden" name="вёрстка-стоимость" value="12" />
+          <input id="quiz-backend-per-hour" type="hidden" name="бэкенд-стоимость" value="16" />
+          <p id="quiz-question" class="quiz__question"></p>
+          <div id="quiz-answers" class="quiz__answers"></div>
+          <div id="quiz-result" class="quiz__result"></div>
+          <ul id="quiz-descrip" class="quiz__descrip"></ul>
+          <div class="quiz__disclaimer" id="quiz-disclaimer">
+            <div class="quiz__disclaimer-title">
+              <p>В индивидуальном пакете возможен самостоятельный подбор функционала.</p>
+            </div>
+            <div class="quiz__disclaimer-tip">
+              <p>*Нажмите &#8220;Далее&#8221;, чтобы выбрать необходимый Вам функционал и просчитать его
+                стоимость.</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <form class="quiz__content form" name="квиз-калькулятор" action="#" method="post">
-        <input id="quiz-design-per-hour" type="hidden" name="дизайн-стоимость" value="12" />
-        <input id="quiz-frontend-per-hour" type="hidden" name="вёрстка-стоимость" value="12" />
-        <input id="quiz-backend-per-hour" type="hidden" name="бэкенд-стоимость" value="16" />
-        <h4 id="quiz-question" class="quiz__question"></h4>
-        <div id="quiz-answers" class="quiz__answers"></div>
-        <div id="quiz-result" class="quiz__result"></div>
-        <ul id="quiz-descrip" class="quiz__descrip"></ul>
-        <div id="quiz-services" class="quiz__services"></div>
-      </form>
-      <form id="quiz-callback" class="quiz__form" name="квиз-контакты" action="#" method="post">
-        <h4>Обратная связь</h4>
-        <label id="quiz-callback-phone" class="form__control">
-          <input class="form__input" name="калькулятор-телефон" type="tel" />
-          <span class="form__label-txt">Телефон</span>
-        </label>
-        <label id="quiz-callback-email" class="form__control">
-          <input class="form__input" name="калькулятор-почта" type="email" />
-          <span class="form__label-txt">E-mail</span>
-        </label>
-        <button type="submit">Отправить</button>
-      </form>
-      <div id="quiz-controls" class="quiz__controls">
-        <button type="button" id="quiz-controls-next" class="quiz__controls-button quiz__controls-button--next">
-          Далее
-        </button>
-        <button type="button" id="quiz-controls-prev" class="quiz__controls-button quiz__controls-button--prev">
-          Назад
-        </button>
+      <div class="quiz__wrapper">
+        <div id="quiz-callback" class="quiz__form">
+          <p class="form__title">Ваши контактные данные</p>
+          <p id="quiz-form-descrip" class="form__descrip">Мы свяжемся с Вами в ближайшее время и поможем
+            подобрать подходящее решение
+            для Вашего бизнеса
+          </p>
+          <label class="form__control">
+            <span class="form__label-txt">Как к Вам можно обращаться?</span>
+            <input class="form__input" name="калькулятор-имя" type="text" placeholder="Например, укажите имя">
+          </label>
+          <div class="form__group">
+            <label class="form__control">
+              <span class="form__label-txt form__label-txt--nowrap">Как нам с вами связаться?</span>
+              <input class="form__input" name="калькулятор-почта" type="email" placeholder="Ваш e-mail">
+            </label>
+            <div class="form__control">
+              <input id="quiz-callback-phone" class="form__input" name="калькулятор-телефон" type="tel" placeholder="Ваш телефон">
+            </div>
+          </div>
+          <div class="form__control form__control--checkbox">
+            <label class="form__checkbox-wrapper">
+              <input type="hidden" name="agreement" value="">
+              <input class="form__checkbox" name="agreement" type="checkbox" checked="" hidden="">
+              <span class="form__checkbox-styled"></span>
+              <span class="form__checkbox-txt">Я Согласен с Политикой Конфиденциальности</span>
+            </label>
+          </div>
+          <div class="form__group form__group--center">
+            <label class="form__control form__upload-button">
+              <input class="form__input" type="file" multiple="multiple" accept=".doc, .docx, .odt, .pdf, .ppt, .pptx, .tex, .txt, .rtf, .wps, .wks, .wpd, .png, .jpg, .jpeg" hidden="hidden" name="callback-additional">
+              <span class="form__error"></span>
+              <span class="form__upload-button-txt">Прикрепите своё ТЗ или описание проекта</span>
+            </label>
+            <button class="button form__submit" type="submit"><span>Отправить</span></button>
+          </div>
+        </div>
+        <div id="quiz-controls" class="quiz__controls">
+          <button type="button" id="quiz-controls-prev" class="quiz__controls-button quiz__controls-button--prev">
+            <svg width="21" height="16" viewBox="0 0 21 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0.292892 7.29289C-0.0976315 7.68342 -0.0976315 8.31658 0.292892 8.70711L6.65685 15.0711C7.04738 15.4616 7.68054 15.4616 8.07107 15.0711C8.46159 14.6805 8.46159 14.0474 8.07107 13.6569L2.41421 8L8.07107 2.34315C8.46159 1.95262 8.46159 1.31946 8.07107 0.928932C7.68054 0.538408 7.04738 0.538408 6.65685 0.928932L0.292892 7.29289ZM21 7L1 7V9L21 9V7Z" fill="#094573" />
+            </svg>
+            Назад
+          </button>
+          <button class="button" type="button" id="quiz-controls-next">
+            Далее
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
   </main>
 </body>
 <script src="assets/scripts/main.js" type="module"></script>
